@@ -6,16 +6,19 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
 
+import dev.jenny.apimovies.genre.dtos.GenreDTORequest;
 import dev.jenny.apimovies.genre.dtos.GenreDTOResponse;
 import dev.jenny.apimovies.genre.exceptions.GenreExceptionNotFound;
-
+import dev.jenny.apimovies.implementations.InterfaceGenericEditService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -30,6 +33,9 @@ class GenreControllerTest {
 
     @MockitoBean
     private InterfaceGenreService service;
+
+    @MockitoBean
+    private InterfaceGenericEditService<GenreDTORequest, GenreDTOResponse> editService;
 
     @Autowired
     private ObjectMapper mapper;
@@ -79,5 +85,25 @@ class GenreControllerTest {
 
         assertThat(response.getStatus(), is(equalTo(404)));
         assertThat(response.getContentAsString(), is(equalTo(errorMessage)));
+    }
+
+    @Test
+    void testStore_ShouldReturnCreated() throws Exception {
+        GenreDTORequest dtoRequest = new GenreDTORequest("Terror");
+        GenreDTOResponse dtoResponse = new GenreDTOResponse(1L, "Terror");
+        String requestJson = mapper.writeValueAsString(dtoRequest);
+        String responseJson = mapper.writeValueAsString(dtoResponse);
+
+        when(editService.storeEntity(dtoRequest)).thenReturn(dtoResponse);
+
+        MockHttpServletResponse response = mockMvc.perform(post("/api/v1/genres")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+                .andExpect(status().isCreated())
+                .andReturn()
+                .getResponse();
+
+        assertThat(response.getStatus(), is(equalTo(201)));
+        assertThat(response.getContentAsString(), is(equalTo(responseJson)));
     }
 }
