@@ -46,4 +46,9 @@ public class GenreServiceImpl implements InterfaceGenreService,
         GenreEntity genreSaved = repository.save(genreToSave);
         return GenreMapper.toDTO(genreSaved);
     }
+
+    @Override
+    public GenreDTOResponse updateEntity(Long id, GenreDTORequest dto) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
 }
