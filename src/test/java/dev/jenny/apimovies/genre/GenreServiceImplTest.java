@@ -3,11 +3,13 @@ package dev.jenny.apimovies.genre;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
 import java.util.Optional;
 
+import dev.jenny.apimovies.genre.exceptions.GenreExceptionNotFound;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -43,5 +45,14 @@ class GenreServiceImplTest {
 
         assertThat(genre.getId(), is(equalTo(1L)));
         assertThat(genre.getName(), is(equalTo("Terror")));
+    }
+
+    @Test
+    void testGetById_NotFound_ShouldThrowException() {
+        when(repository.findById(1L)).thenReturn(Optional.empty());
+
+        GenreExceptionNotFound exception = assertThrows(GenreExceptionNotFound.class, () -> service.getById(1L));
+
+        assertThat(exception.getMessage(), is(equalTo("Genre not found. Id 1 does not exist.")));
     }
 }
