@@ -119,4 +119,14 @@ class GenreControllerTest {
                 .content(requestJson))
                 .andExpect(status().isConflict());
     }
+
+    @Test
+    void testStore_ShouldReturnBadRequest_WhenNameIsBlank() throws Exception {
+        String invalidJson = "{\"name\":\"\"}";
+
+        mockMvc.perform(post("/api/v1/genres")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(invalidJson))
+                .andExpect(status().isBadRequest());
+    }
 }
