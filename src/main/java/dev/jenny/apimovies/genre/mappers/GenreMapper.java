@@ -5,6 +5,9 @@ import dev.jenny.apimovies.genre.dtos.GenreDTO;
 
 public class GenreMapper {
 
+    private GenreMapper() {
+    }
+
     public static GenreDTO toDTO(GenreEntity entity) {
         return new GenreDTO(entity.getId(), entity.getName());
     }
