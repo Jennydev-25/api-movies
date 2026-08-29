@@ -15,6 +15,7 @@ import dev.jenny.apimovies.genre.dtos.GenreDTOResponse;
 import dev.jenny.apimovies.genre.exceptions.GenreExceptionNotFound;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -78,7 +79,7 @@ class GenreServiceImplTest {
         GenreDTORequest dtoRequest = new GenreDTORequest("Terror");
         GenreEntity existingGenre = new GenreEntity(1L, "Terror");
 
-        when(repository.findAll(any(Example.class))).thenReturn(List.of(existingGenre));
+        when(repository.findAll(ArgumentMatchers.<Example<GenreEntity>>any())).thenReturn(List.of(existingGenre));
 
         GenreDTOResponse genre = service.storeEntity(dtoRequest);
 
