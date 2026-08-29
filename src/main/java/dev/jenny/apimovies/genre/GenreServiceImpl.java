@@ -2,6 +2,7 @@ package dev.jenny.apimovies.genre;
 
 import java.util.List;
 
+import dev.jenny.apimovies.genre.exceptions.GenreExceptionNotFound;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,6 +21,7 @@ public class GenreServiceImpl implements InterfaceGenreService {
 
     @Override
     public GenreEntity getById(Long id) {
-        return repository.findById(id).orElseThrow();
+        return repository.findById(id)
+                .orElseThrow(() -> new GenreExceptionNotFound("Genre not found. Id " + id + " does not exist."));
     }
 }
