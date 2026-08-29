@@ -8,6 +8,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 
 import dev.jenny.apimovies.genre.GenreEntity;
+import dev.jenny.apimovies.genre.dtos.GenreDTORequest;
 import dev.jenny.apimovies.genre.dtos.GenreDTOResponse;
 import org.junit.jupiter.api.Test;
 
@@ -31,5 +32,14 @@ class GenreMapperTest {
 
         constructor.setAccessible(true);
         constructor.newInstance();
+    }
+
+    @Test
+    void testToEntity() {
+        GenreDTORequest dto = new GenreDTORequest("Terror");
+
+        GenreEntity genre = GenreMapper.toEntity(dto);
+
+        assertThat(genre.getName(), is(equalTo("Terror")));
     }
 }
