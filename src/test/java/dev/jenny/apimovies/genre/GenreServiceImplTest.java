@@ -18,6 +18,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Example;
 
 @ExtendWith(MockitoExtension.class)
 class GenreServiceImplTest {
@@ -70,5 +71,17 @@ class GenreServiceImplTest {
 
         assertThat(genre.id(), is(equalTo(1L)));
         assertThat(genre.name(), is(equalTo("Terror")));
+    }
+
+    @Test
+    void testStoreEntity_ShouldReturnNull_WhenGenreAlreadyExists() {
+        GenreDTORequest dtoRequest = new GenreDTORequest("Terror");
+        GenreEntity existingGenre = new GenreEntity(1L, "Terror");
+
+        when(repository.findAll(any(Example.class))).thenReturn(List.of(existingGenre));
+
+        GenreDTOResponse genre = service.storeEntity(dtoRequest);
+
+        assertThat(genre, is(equalTo(null)));
     }
 }
