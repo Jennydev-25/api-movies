@@ -48,4 +48,19 @@ class GenreControllerTest {
         assertThat(response.getContentAsString(), is(equalTo(json)));
         assertThat(response.getContentAsString(), containsString("Terror"));
     }
+
+    @Test
+    void testGetById_ShouldReturnGenre() throws Exception {
+        GenreDTO dto = new GenreDTO(1L, "Terror");
+        String json = mapper.writeValueAsString(dto);
+
+        when(service.getById(1L)).thenReturn(dto);
+        MockHttpServletResponse response = mockMvc.perform(get("/api/v1/genres/1"))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse();
+
+        assertThat(response.getStatus(), is(equalTo(200)));
+        assertThat(response.getContentAsString(), is(equalTo(json)));
+    }
 }
