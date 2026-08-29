@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,5 +32,16 @@ class GenreServiceImplTest {
 
         assertThat(genres.size(), is(equalTo(2)));
         assertThat(genres.get(0).getName(), is(equalTo("Terror")));
+    }
+
+    @Test
+    void testGetById() {
+        GenreEntity genreMock = new GenreEntity(1L, "Terror");
+
+        when(repository.findById(1L)).thenReturn(Optional.of(genreMock));
+        GenreEntity genre = service.getById(1L);
+
+        assertThat(genre.getId(), is(equalTo(1L)));
+        assertThat(genre.getName(), is(equalTo("Terror")));
     }
 }
