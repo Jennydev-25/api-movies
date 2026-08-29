@@ -9,8 +9,4 @@ public class GenreExceptionNotFound extends GenreException {
     public GenreExceptionNotFound(String message) {
         super(message);
     }
-
-    public GenreExceptionNotFound(String message, Throwable cause) {
-        super(message, cause);
-    }
 }
