@@ -8,7 +8,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 
 import dev.jenny.apimovies.genre.GenreEntity;
-import dev.jenny.apimovies.genre.dtos.GenreDTO;
+import dev.jenny.apimovies.genre.dtos.GenreDTOResponse;
 import org.junit.jupiter.api.Test;
 
 class GenreMapperTest {
@@ -17,7 +17,7 @@ class GenreMapperTest {
     void testToDTO() {
         GenreEntity genre = new GenreEntity(1L, "Terror");
 
-        GenreDTO dto = GenreMapper.toDTO(genre);
+        GenreDTOResponse dto = GenreMapper.toDTO(genre);
 
         assertThat(dto.id(), is(equalTo(1L)));
         assertThat(dto.name(), is(equalTo("Terror")));

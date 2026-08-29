@@ -10,7 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.List;
 
-import dev.jenny.apimovies.genre.dtos.GenreDTO;
+import dev.jenny.apimovies.genre.dtos.GenreDTOResponse;
 import dev.jenny.apimovies.genre.exceptions.GenreExceptionNotFound;
 
 import org.junit.jupiter.api.Test;
@@ -36,8 +36,8 @@ class GenreControllerTest {
 
     @Test
     void testIndex_ShouldReturnGenres() throws Exception {
-        GenreDTO dto = new GenreDTO(1L, "Terror");
-        List<GenreDTO> genres = List.of(dto);
+        GenreDTOResponse dto = new GenreDTOResponse(1L, "Terror");
+        List<GenreDTOResponse> genres = List.of(dto);
         String json = mapper.writeValueAsString(genres);
 
         when(service.getEntities()).thenReturn(genres);
@@ -53,7 +53,7 @@ class GenreControllerTest {
 
     @Test
     void testGetById_ShouldReturnGenre() throws Exception {
-        GenreDTO dto = new GenreDTO(1L, "Terror");
+        GenreDTOResponse dto = new GenreDTOResponse(1L, "Terror");
         String json = mapper.writeValueAsString(dto);
 
         when(service.getById(1L)).thenReturn(dto);

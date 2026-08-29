@@ -2,7 +2,7 @@ package dev.jenny.apimovies.genre;
 
 import java.util.List;
 
-import dev.jenny.apimovies.genre.dtos.GenreDTO;
+import dev.jenny.apimovies.genre.dtos.GenreDTOResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,12 +19,12 @@ public class GenreController {
     }
 
     @GetMapping("")
-    public List<GenreDTO> index() {
+    public List<GenreDTOResponse> index() {
         return service.getEntities();
     }
 
     @GetMapping("{id}")
-    public GenreDTO getById(@PathVariable Long id) {
+    public GenreDTOResponse getById(@PathVariable Long id) {
         return service.getById(id);
     }
 }
