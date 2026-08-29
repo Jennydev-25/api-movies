@@ -106,4 +106,17 @@ class GenreControllerTest {
         assertThat(response.getStatus(), is(equalTo(201)));
         assertThat(response.getContentAsString(), is(equalTo(responseJson)));
     }
+
+    @Test
+    void testStore_ShouldReturnConflict_WhenGenreAlreadyExists() throws Exception {
+        GenreDTORequest dtoRequest = new GenreDTORequest("Terror");
+        String requestJson = mapper.writeValueAsString(dtoRequest);
+
+        when(editService.storeEntity(dtoRequest)).thenReturn(null);
+
+        mockMvc.perform(post("/api/v1/genres")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+                .andExpect(status().isConflict());
+    }
 }
