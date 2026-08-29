@@ -11,6 +11,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.List;
 
 import dev.jenny.apimovies.genre.dtos.GenreDTO;
+import dev.jenny.apimovies.genre.exceptions.GenreExceptionNotFound;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -62,5 +64,20 @@ class GenreControllerTest {
 
         assertThat(response.getStatus(), is(equalTo(200)));
         assertThat(response.getContentAsString(), is(equalTo(json)));
+    }
+
+    @Test
+    void testGetById_ShouldReturnNotFound_WhenGenreDoesNotExist() throws Exception {
+        String errorMessage = "Genre not found. Id 99 does not exist.";
+
+        when(service.getById(99L)).thenThrow(new GenreExceptionNotFound(errorMessage));
+
+        MockHttpServletResponse response = mockMvc.perform(get("/api/v1/genres/99"))
+                .andExpect(status().isNotFound())
+                .andReturn()
+                .getResponse();
+
+        assertThat(response.getStatus(), is(equalTo(404)));
+        assertThat(response.getContentAsString(), is(equalTo(errorMessage)));
     }
 }
