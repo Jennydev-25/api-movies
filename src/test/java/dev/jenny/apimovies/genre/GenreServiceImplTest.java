@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 import java.util.Optional;
 
+import dev.jenny.apimovies.genre.dtos.GenreDTO;
 import dev.jenny.apimovies.genre.exceptions.GenreExceptionNotFound;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,10 +31,10 @@ class GenreServiceImplTest {
         List<GenreEntity> mock = List.of(new GenreEntity(1L, "Terror"), new GenreEntity(2L, "Comedia"));
         when(repository.findAll()).thenReturn(mock);
 
-        List<GenreEntity> genres = service.getEntities();
+        List<GenreDTO> genres = service.getEntities();
 
         assertThat(genres.size(), is(equalTo(2)));
-        assertThat(genres.get(0).getName(), is(equalTo("Terror")));
+        assertThat(genres.get(0).name(), is(equalTo("Terror")));
     }
 
     @Test
@@ -41,10 +42,10 @@ class GenreServiceImplTest {
         GenreEntity genreMock = new GenreEntity(1L, "Terror");
 
         when(repository.findById(1L)).thenReturn(Optional.of(genreMock));
-        GenreEntity genre = service.getById(1L);
+        GenreDTO genre = service.getById(1L);
 
-        assertThat(genre.getId(), is(equalTo(1L)));
-        assertThat(genre.getName(), is(equalTo("Terror")));
+        assertThat(genre.id(), is(equalTo(1L)));
+        assertThat(genre.name(), is(equalTo("Terror")));
     }
 
     @Test

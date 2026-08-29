@@ -2,9 +2,11 @@ package dev.jenny.apimovies.genre;
 
 import java.util.List;
 
+import dev.jenny.apimovies.genre.dtos.GenreDTO;
+
 public interface InterfaceGenreService {
 
-    List<GenreEntity> getEntities();
+    List<GenreDTO> getEntities();
 
-    GenreEntity getById(Long id);
+    GenreDTO getById(Long id);
 }

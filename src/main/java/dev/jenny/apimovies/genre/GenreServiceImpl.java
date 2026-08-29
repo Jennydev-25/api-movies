@@ -2,7 +2,9 @@ package dev.jenny.apimovies.genre;
 
 import java.util.List;
 
+import dev.jenny.apimovies.genre.dtos.GenreDTO;
 import dev.jenny.apimovies.genre.exceptions.GenreExceptionNotFound;
+import dev.jenny.apimovies.genre.mappers.GenreMapper;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,13 +17,16 @@ public class GenreServiceImpl implements InterfaceGenreService {
     }
 
     @Override
-    public List<GenreEntity> getEntities() {
-        return repository.findAll();
+    public List<GenreDTO> getEntities() {
+        return repository.findAll().stream()
+                .map(GenreMapper::toDTO)
+                .toList();
     }
 
     @Override
-    public GenreEntity getById(Long id) {
-        return repository.findById(id)
+    public GenreDTO getById(Long id) {
+        GenreEntity genre = repository.findById(id)
                 .orElseThrow(() -> new GenreExceptionNotFound("Genre not found. Id " + id + " does not exist."));
+        return GenreMapper.toDTO(genre);
     }
 }
