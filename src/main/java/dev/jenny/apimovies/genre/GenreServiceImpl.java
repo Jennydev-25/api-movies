@@ -7,6 +7,7 @@ import dev.jenny.apimovies.genre.dtos.GenreDTOResponse;
 import dev.jenny.apimovies.genre.exceptions.GenreExceptionNotFound;
 import dev.jenny.apimovies.genre.mappers.GenreMapper;
 import dev.jenny.apimovies.implementations.InterfaceGenericEditService;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -35,6 +36,13 @@ public class GenreServiceImpl implements InterfaceGenreService,
     @Override
     public GenreDTOResponse storeEntity(GenreDTORequest dto) {
         GenreEntity genreToSave = GenreMapper.toEntity(dto);
+
+        Example<GenreEntity> example = Example.of(genreToSave);
+        boolean isEmpty = repository.findAll(example).isEmpty();
+
+        if (!isEmpty)
+            return null;
+
         GenreEntity genreSaved = repository.save(genreToSave);
         return GenreMapper.toDTO(genreSaved);
     }
