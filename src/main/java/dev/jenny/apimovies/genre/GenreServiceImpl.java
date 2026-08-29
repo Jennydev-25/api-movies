@@ -20,6 +20,6 @@ public class GenreServiceImpl implements InterfaceGenreService {
 
     @Override
     public GenreEntity getById(Long id) {
-        return null;
+        return repository.findById(id).orElseThrow();
     }
 }
