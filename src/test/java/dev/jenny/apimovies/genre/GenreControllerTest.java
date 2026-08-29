@@ -10,12 +10,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import dev.jenny.apimovies.genre.dtos.GenreDTORequest;
 import dev.jenny.apimovies.genre.dtos.GenreDTOResponse;
+import dev.jenny.apimovies.genre.exceptions.GenreException;
 import dev.jenny.apimovies.genre.exceptions.GenreExceptionNotFound;
 import dev.jenny.apimovies.implementations.InterfaceGenericEditService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
@@ -128,5 +133,20 @@ class GenreControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(invalidJson))
                 .andExpect(status().isBadRequest());
+    }
+
+    @ParameterizedTest
+    @MethodSource("exceptionScenarios")
+    void testGetById_ShouldHandleUnexpectedExceptions(Exception exception, int expectedStatus) throws Exception {
+        when(service.getById(1L)).thenThrow(exception);
+
+        mockMvc.perform(get("/api/v1/genres/1"))
+                .andExpect(status().is(expectedStatus));
+    }
+
+    private static Stream<Arguments> exceptionScenarios() {
+        return Stream.of(
+                Arguments.of(new GenreException("Invalid genre operation"), 400),
+                Arguments.of(new RuntimeException("Unexpected error"), 500));
     }
 }
