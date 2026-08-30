@@ -57,4 +57,21 @@ class MovieControllerTest {
         assertThat(response.getContentAsString(), is(equalTo(json)));
         assertThat(response.getContentAsString(), containsString("El niño con el pijama de rayas"));
     }
+
+    @Test
+    void testGetById_ShouldReturnMovie() throws Exception {
+        MovieDTOResponse dto = new MovieDTOResponse(1L, "El niño con el pijama de rayas", Set.of("Drama"), 2008,
+                Set.of("Jack Scanlon"));
+        String json = mapper.writeValueAsString(dto);
+
+        when(service.getById(1L)).thenReturn(dto);
+
+        MockHttpServletResponse response = mockMvc.perform(get("/api/v1/movies/1"))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse();
+
+        assertThat(response.getStatus(), is(equalTo(200)));
+        assertThat(response.getContentAsString(), is(equalTo(json)));
+    }
 }
