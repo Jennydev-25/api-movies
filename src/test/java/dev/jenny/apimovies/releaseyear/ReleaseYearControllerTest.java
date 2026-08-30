@@ -104,4 +104,17 @@ class ReleaseYearControllerTest {
         assertThat(response.getStatus(), is(equalTo(201)));
         assertThat(response.getContentAsString(), is(equalTo(responseJson)));
     }
+
+    @Test
+    void testStore_ShouldReturnConflict_WhenReleaseYearAlreadyExists() throws Exception {
+        ReleaseYearDTORequest dtoRequest = new ReleaseYearDTORequest(1994);
+        String requestJson = mapper.writeValueAsString(dtoRequest);
+
+        when(editService.storeEntity(dtoRequest)).thenReturn(null);
+
+        mockMvc.perform(post("/api/v1/release-years")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+                .andExpect(status().isConflict());
+    }
 }
