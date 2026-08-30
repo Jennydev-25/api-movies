@@ -81,4 +81,18 @@ class ActorServiceImplTest {
 
         assertThat(actor, is(equalTo(null)));
     }
+
+    @Test
+    void testUpdateEntity_ShouldUpdateAndReturnActor() {
+        ActorDTORequest dtoRequest = new ActorDTORequest("Robert Downey Jr.", "British", LocalDate.of(1965, 4, 4));
+        ActorEntity actorUpdated = new ActorEntity(1L, "Robert Downey Jr.", "British", LocalDate.of(1965, 4, 4));
+
+        when(repository.existsById(1L)).thenReturn(true);
+        when(repository.save(any(ActorEntity.class))).thenReturn(actorUpdated);
+
+        ActorDTOResponse actor = service.updateEntity(1L, dtoRequest);
+
+        assertThat(actor.id(), is(equalTo(1L)));
+        assertThat(actor.nationality(), is(equalTo("British")));
+    }
 }
