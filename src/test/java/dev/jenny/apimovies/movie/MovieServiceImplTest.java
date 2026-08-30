@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
@@ -15,6 +16,7 @@ import dev.jenny.apimovies.actor.ActorEntity;
 import dev.jenny.apimovies.actor.ActorRepository;
 import dev.jenny.apimovies.genre.GenreEntity;
 import dev.jenny.apimovies.genre.GenreRepository;
+import dev.jenny.apimovies.movie.dtos.MovieDTORequest;
 import dev.jenny.apimovies.movie.dtos.MovieDTOResponse;
 import dev.jenny.apimovies.movie.exceptions.MovieExceptionNotFound;
 import dev.jenny.apimovies.releaseyear.ReleaseYearEntity;
@@ -81,5 +83,28 @@ class MovieServiceImplTest {
         when(repository.findById(1L)).thenReturn(Optional.empty());
 
         assertThrows(MovieExceptionNotFound.class, () -> service.getById(1L));
+    }
+
+    @Test
+    void testStoreEntity_ShouldSaveAndReturnMovie() {
+        GenreEntity genre = new GenreEntity(1L, "Drama");
+        ReleaseYearEntity releaseYear = new ReleaseYearEntity(1L, 2008);
+        ActorEntity actor = new ActorEntity(1L, "Jack Scanlon", "English", LocalDate.of(1998, 8, 6));
+
+        MovieDTORequest dtoRequest = new MovieDTORequest("El niño con el pijama de rayas", Set.of(1L), 1L,
+                Set.of(1L));
+        MovieEntity movieSaved = new MovieEntity(1L, "El niño con el pijama de rayas", Set.of(genre), releaseYear,
+                Set.of(actor));
+
+        when(releaseYearRepository.findById(1L)).thenReturn(Optional.of(releaseYear));
+        when(genreRepository.findAllById(Set.of(1L))).thenReturn(List.of(genre));
+        when(actorRepository.findAllById(Set.of(1L))).thenReturn(List.of(actor));
+        when(repository.existsByTitleAndReleaseYear("El niño con el pijama de rayas", releaseYear)).thenReturn(false);
+        when(repository.save(any(MovieEntity.class))).thenReturn(movieSaved);
+
+        MovieDTOResponse movie = service.storeEntity(dtoRequest);
+
+        assertThat(movie.id(), is(equalTo(1L)));
+        assertThat(movie.title(), is(equalTo("El niño con el pijama de rayas")));
     }
 }
