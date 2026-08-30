@@ -100,4 +100,14 @@ class ReleaseYearServiceImplTest {
         assertThat(releaseYear.id(), is(equalTo(1L)));
         assertThat(releaseYear.releaseYear(), is(equalTo(2001)));
     }
+
+    @Test
+    void testUpdateEntity_NotFound_ShouldThrowException() {
+        when(repository.existsById(1L)).thenReturn(false);
+
+        ReleaseYearExceptionNotFound exception = assertThrows(ReleaseYearExceptionNotFound.class,
+                () -> service.updateEntity(1L, new ReleaseYearDTORequest(2001)));
+
+        assertThat(exception.getMessage(), is(equalTo("Release year not found. Id 1 does not exist.")));
+    }
 }
