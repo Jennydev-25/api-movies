@@ -3,6 +3,7 @@ package dev.jenny.apimovies.releaseyear;
 import java.util.List;
 
 import dev.jenny.apimovies.releaseyear.dtos.ReleaseYearDTOResponse;
+import dev.jenny.apimovies.releaseyear.exceptions.ReleaseYearExceptionNotFound;
 import dev.jenny.apimovies.releaseyear.mappers.ReleaseYearMapper;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,9 @@ public class ReleaseYearServiceImpl implements InterfaceReleaseYearService {
 
     @Override
     public ReleaseYearDTOResponse getById(Long id) {
-        ReleaseYearEntity releaseYear = repository.findById(id).orElseThrow();
+        ReleaseYearEntity releaseYear = repository.findById(id)
+                .orElseThrow(() -> new ReleaseYearExceptionNotFound(
+                        "Release year not found. Id " + id + " does not exist."));
         return ReleaseYearMapper.toDTO(releaseYear);
     }
 }
