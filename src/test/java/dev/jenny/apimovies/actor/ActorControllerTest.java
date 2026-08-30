@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Stream;
 
 import dev.jenny.apimovies.actor.dtos.ActorDTORequest;
 import dev.jenny.apimovies.actor.dtos.ActorDTOResponse;
@@ -19,6 +20,9 @@ import dev.jenny.apimovies.actor.exceptions.ActorExceptionNotFound;
 import dev.jenny.apimovies.implementations.InterfaceGenericEditService;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
@@ -153,5 +157,29 @@ class ActorControllerTest {
 
         assertThat(response.getStatus(), is(equalTo(200)));
         assertThat(response.getContentAsString(), is(equalTo(responseJson)));
+    }
+
+    @ParameterizedTest
+    @MethodSource("updateErrorScenarios")
+    void testUpdate_ShouldHandleErrors(RuntimeException exception, int expectedStatus) throws Exception {
+        ActorDTORequest dtoRequest = new ActorDTORequest("Robert Downey Jr.", "American", LocalDate.of(1965, 4, 4));
+        String requestJson = mapper.writeValueAsString(dtoRequest);
+
+        if (exception != null) {
+            when(editService.updateEntity(1L, dtoRequest)).thenThrow(exception);
+        } else {
+            when(editService.updateEntity(1L, dtoRequest)).thenReturn(null);
+        }
+
+        mockMvc.perform(put("/api/v1/actors/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+                .andExpect(status().is(expectedStatus));
+    }
+
+    private static Stream<Arguments> updateErrorScenarios() {
+        return Stream.of(
+                Arguments.of(new ActorExceptionNotFound("Actor not found. Id 1 does not exist."), 404),
+                Arguments.of(null, 409));
     }
 }
