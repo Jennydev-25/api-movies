@@ -15,6 +15,7 @@ import java.util.stream.Stream;
 import dev.jenny.apimovies.implementations.InterfaceGenericEditService;
 import dev.jenny.apimovies.releaseyear.dtos.ReleaseYearDTORequest;
 import dev.jenny.apimovies.releaseyear.dtos.ReleaseYearDTOResponse;
+import dev.jenny.apimovies.releaseyear.exceptions.ReleaseYearException;
 import dev.jenny.apimovies.releaseyear.exceptions.ReleaseYearExceptionNotFound;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -165,5 +166,20 @@ class ReleaseYearControllerTest {
         return Stream.of(
                 Arguments.of(new ReleaseYearExceptionNotFound("Release year not found. Id 1 does not exist."), 404),
                 Arguments.of(null, 409));
+    }
+
+    @ParameterizedTest
+    @MethodSource("exceptionScenarios")
+    void testGetById_ShouldHandleUnexpectedExceptions(Exception exception, int expectedStatus) throws Exception {
+        when(service.getById(1L)).thenThrow(exception);
+
+        mockMvc.perform(get("/api/v1/release-years/1"))
+                .andExpect(status().is(expectedStatus));
+    }
+
+    private static Stream<Arguments> exceptionScenarios() {
+        return Stream.of(
+                Arguments.of(new ReleaseYearException("Invalid release year operation"), 400),
+                Arguments.of(new RuntimeException("Unexpected error"), 500));
     }
 }
