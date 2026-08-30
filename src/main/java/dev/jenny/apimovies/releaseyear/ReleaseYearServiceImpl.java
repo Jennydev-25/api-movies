@@ -46,7 +46,9 @@ public class ReleaseYearServiceImpl implements InterfaceReleaseYearService {
     }
 
     public ReleaseYearDTOResponse updateEntity(Long id, ReleaseYearDTORequest dto) {
-        ReleaseYearEntity releaseYearToUpdate = new ReleaseYearEntity(id, dto.releaseYear());
+        ReleaseYearEntity releaseYearToUpdate = ReleaseYearMapper.toEntity(dto);
+        releaseYearToUpdate.setId(id);
+
         ReleaseYearEntity releaseYearUpdated = repository.save(releaseYearToUpdate);
         return ReleaseYearMapper.toDTO(releaseYearUpdated);
     }
