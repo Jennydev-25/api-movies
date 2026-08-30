@@ -113,4 +113,18 @@ class MovieControllerTest {
         assertThat(response.getStatus(), is(equalTo(201)));
         assertThat(response.getContentAsString(), is(equalTo(responseJson)));
     }
+
+    @Test
+    void testStore_ShouldReturnConflict_WhenMovieAlreadyExists() throws Exception {
+        MovieDTORequest dtoRequest = new MovieDTORequest("El niño con el pijama de rayas", Set.of(1L), 1L,
+                Set.of(1L));
+        String requestJson = mapper.writeValueAsString(dtoRequest);
+
+        when(editService.storeEntity(dtoRequest)).thenReturn(null);
+
+        mockMvc.perform(post("/api/v1/movies")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+                .andExpect(status().isConflict());
+    }
 }
