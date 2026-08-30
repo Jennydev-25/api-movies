@@ -46,4 +46,19 @@ class ReleaseYearControllerTest {
         assertThat(response.getStatus(), is(equalTo(200)));
         assertThat(response.getContentAsString(), is(equalTo(json)));
     }
+
+    @Test
+    void testGetById_ShouldReturnReleaseYear() throws Exception {
+        ReleaseYearDTOResponse dto = new ReleaseYearDTOResponse(1L, 1994);
+        String json = mapper.writeValueAsString(dto);
+
+        when(service.getById(1L)).thenReturn(dto);
+        MockHttpServletResponse response = mockMvc.perform(get("/api/v1/release-years/1"))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse();
+
+        assertThat(response.getStatus(), is(equalTo(200)));
+        assertThat(response.getContentAsString(), is(equalTo(json)));
+    }
 }
