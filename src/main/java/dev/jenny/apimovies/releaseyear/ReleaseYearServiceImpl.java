@@ -6,6 +6,7 @@ import dev.jenny.apimovies.releaseyear.dtos.ReleaseYearDTORequest;
 import dev.jenny.apimovies.releaseyear.dtos.ReleaseYearDTOResponse;
 import dev.jenny.apimovies.releaseyear.exceptions.ReleaseYearExceptionNotFound;
 import dev.jenny.apimovies.releaseyear.mappers.ReleaseYearMapper;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -33,6 +34,13 @@ public class ReleaseYearServiceImpl implements InterfaceReleaseYearService {
 
     public ReleaseYearDTOResponse storeEntity(ReleaseYearDTORequest dto) {
         ReleaseYearEntity releaseYearToSave = ReleaseYearMapper.toEntity(dto);
+
+        Example<ReleaseYearEntity> example = Example.of(releaseYearToSave);
+        boolean isEmpty = repository.findAll(example).isEmpty();
+
+        if (!isEmpty)
+            return null;
+
         ReleaseYearEntity releaseYearSaved = repository.save(releaseYearToSave);
         return ReleaseYearMapper.toDTO(releaseYearSaved);
     }
