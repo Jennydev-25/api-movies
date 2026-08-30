@@ -95,4 +95,15 @@ class ActorServiceImplTest {
         assertThat(actor.id(), is(equalTo(1L)));
         assertThat(actor.nationality(), is(equalTo("British")));
     }
+
+    @Test
+    void testUpdateEntity_NotFound_ShouldThrowException() {
+        when(repository.existsById(1L)).thenReturn(false);
+
+        ActorExceptionNotFound exception = assertThrows(ActorExceptionNotFound.class,
+                () -> service.updateEntity(1L,
+                        new ActorDTORequest("Robert Downey Jr.", "American", LocalDate.of(1965, 4, 4))));
+
+        assertThat(exception.getMessage(), is(equalTo("Actor not found. Id 1 does not exist.")));
+    }
 }
