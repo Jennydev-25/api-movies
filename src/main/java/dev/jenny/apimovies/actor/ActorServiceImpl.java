@@ -52,6 +52,16 @@ public class ActorServiceImpl implements InterfaceActorService,
 
     @Override
     public ActorDTOResponse updateEntity(Long id, ActorDTORequest dto) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        if (!repository.existsById(id))
+            throw new ActorExceptionNotFound("Actor not found. Id " + id + " does not exist.");
+
+        if (repository.existsByNameAndBirthDateAndIdNot(dto.name(), dto.birthDate(), id))
+            return null;
+
+        ActorEntity actorToSave = ActorMapper.toEntity(dto);
+        actorToSave.setId(id);
+
+        ActorEntity actorSaved = repository.save(actorToSave);
+        return ActorMapper.toDTO(actorSaved);
     }
 }
