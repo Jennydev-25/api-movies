@@ -13,12 +13,13 @@ import java.util.Optional;
 import dev.jenny.apimovies.releaseyear.dtos.ReleaseYearDTORequest;
 import dev.jenny.apimovies.releaseyear.dtos.ReleaseYearDTOResponse;
 import dev.jenny.apimovies.releaseyear.exceptions.ReleaseYearExceptionNotFound;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Example;
 
 @ExtendWith(MockitoExtension.class)
 class ReleaseYearServiceImplTest {
@@ -72,5 +73,18 @@ class ReleaseYearServiceImplTest {
 
         assertThat(releaseYear.id(), is(equalTo(1L)));
         assertThat(releaseYear.releaseYear(), is(equalTo(1994)));
+    }
+
+    @Test
+    void testStoreEntity_ShouldReturnNull_WhenReleaseYearAlreadyExists() {
+        ReleaseYearDTORequest dtoRequest = new ReleaseYearDTORequest(1994);
+        ReleaseYearEntity existingReleaseYear = new ReleaseYearEntity(1L, 1994);
+
+        when(repository.findAll(ArgumentMatchers.<Example<ReleaseYearEntity>>any()))
+                .thenReturn(List.of(existingReleaseYear));
+
+        ReleaseYearDTOResponse releaseYear = service.storeEntity(dtoRequest);
+
+        assertThat(releaseYear, is(equalTo(null)));
     }
 }
