@@ -7,4 +7,6 @@ import dev.jenny.apimovies.releaseyear.dtos.ReleaseYearDTOResponse;
 public interface InterfaceReleaseYearService {
 
     List<ReleaseYearDTOResponse> getEntities();
+
+    ReleaseYearDTOResponse getById(Long id);
 }
