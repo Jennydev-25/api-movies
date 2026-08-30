@@ -28,4 +28,20 @@ class MovieEntityTest {
         assertThat(movie, is(instanceOf(MovieEntity.class)));
         assertThat(movie.getClass().getDeclaredFields().length, is(equalTo(5)));
     }
+
+    @Test
+    void testMovieEntity() {
+        GenreEntity genre = new GenreEntity(1L, "Drama");
+        ReleaseYearEntity releaseYear = new ReleaseYearEntity(1L, 2008);
+        ActorEntity actor = new ActorEntity(1L, "Robert Downey Jr.", "American", LocalDate.of(1965, 4, 4));
+
+        MovieEntity movie = new MovieEntity(1L, "El niño con el pijama de rayas", Set.of(genre), releaseYear,
+                Set.of(actor));
+
+        assertThat(movie.getId(), is(equalTo(1L)));
+        assertThat(movie.getTitle(), is(equalTo("El niño con el pijama de rayas")));
+        assertThat(movie.getGenres(), is(equalTo(Set.of(genre))));
+        assertThat(movie.getReleaseYear(), is(equalTo(releaseYear)));
+        assertThat(movie.getActors(), is(equalTo(Set.of(actor))));
+    }
 }
