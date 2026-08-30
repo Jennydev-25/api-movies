@@ -3,6 +3,7 @@ package dev.jenny.apimovies.actor;
 import java.util.List;
 
 import dev.jenny.apimovies.actor.dtos.ActorDTOResponse;
+import dev.jenny.apimovies.actor.exceptions.ActorExceptionNotFound;
 import dev.jenny.apimovies.actor.mappers.ActorMapper;
 
 import org.springframework.stereotype.Service;
@@ -25,6 +26,9 @@ public class ActorServiceImpl implements InterfaceActorService {
 
     @Override
     public ActorDTOResponse getById(Long id) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        ActorEntity actor = repository.findById(id)
+                .orElseThrow(() -> new ActorExceptionNotFound(
+                        "Actor not found. Id " + id + " does not exist."));
+        return ActorMapper.toDTO(actor);
     }
 }
