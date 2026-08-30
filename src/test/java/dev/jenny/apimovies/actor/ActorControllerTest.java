@@ -109,4 +109,17 @@ class ActorControllerTest {
         assertThat(response.getStatus(), is(equalTo(201)));
         assertThat(response.getContentAsString(), is(equalTo(responseJson)));
     }
+
+    @Test
+    void testStore_ShouldReturnConflict_WhenActorAlreadyExists() throws Exception {
+        ActorDTORequest dtoRequest = new ActorDTORequest("Robert Downey Jr.", "American", LocalDate.of(1965, 4, 4));
+        String requestJson = mapper.writeValueAsString(dtoRequest);
+
+        when(editService.storeEntity(dtoRequest)).thenReturn(null);
+
+        mockMvc.perform(post("/api/v1/actors")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+                .andExpect(status().isConflict());
+    }
 }
