@@ -66,4 +66,25 @@ public class MovieServiceImpl implements InterfaceMovieService,
         MovieEntity movieSaved = repository.save(movieToSave);
         return MovieMapper.toDTO(movieSaved);
     }
+
+    @Override
+    public MovieDTOResponse updateEntity(Long id, MovieDTORequest dto) {
+        if (!repository.existsById(id))
+            throw new MovieExceptionNotFound("Movie not found. Id " + id + " does not exist.");
+
+        ReleaseYearEntity releaseYear = releaseYearRepository.findById(dto.releaseYearId())
+                .orElseThrow(() -> new ReleaseYearExceptionNotFound(
+                        "Release year not found. Id " + dto.releaseYearId() + " does not exist."));
+
+        if (repository.existsByTitleAndReleaseYearAndIdNot(dto.title(), releaseYear, id))
+            return null;
+
+        Set<GenreEntity> genres = Set.copyOf(genreRepository.findAllById(dto.genreIds()));
+        Set<ActorEntity> actors = Set.copyOf(actorRepository.findAllById(dto.actorIds()));
+
+        MovieEntity movieToSave = MovieMapper.toEntity(dto, genres, releaseYear, actors);
+        movieToSave.setId(id);
+        MovieEntity movieSaved = repository.save(movieToSave);
+        return MovieMapper.toDTO(movieSaved);
+    }
 }
