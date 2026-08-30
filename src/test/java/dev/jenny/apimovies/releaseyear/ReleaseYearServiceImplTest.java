@@ -92,7 +92,7 @@ class ReleaseYearServiceImplTest {
     void testUpdateEntity_ShouldUpdateAndReturnReleaseYear() {
         ReleaseYearDTORequest dtoRequest = new ReleaseYearDTORequest(2001);
         ReleaseYearEntity releaseYearUpdated = new ReleaseYearEntity(1L, 2001);
-        
+
         when(repository.existsById(1L)).thenReturn(true);
         when(repository.save(any(ReleaseYearEntity.class))).thenReturn(releaseYearUpdated);
 
@@ -110,5 +110,15 @@ class ReleaseYearServiceImplTest {
                 () -> service.updateEntity(1L, new ReleaseYearDTORequest(2001)));
 
         assertThat(exception.getMessage(), is(equalTo("Release year not found. Id 1 does not exist.")));
+    }
+
+    @Test
+    void testUpdateEntity_ShouldReturnNull_WhenReleaseYearAlreadyExists() {
+        when(repository.existsById(1L)).thenReturn(true);
+        when(repository.existsByReleaseYearAndIdNot(2001, 1L)).thenReturn(true);
+
+        ReleaseYearDTOResponse releaseYear = service.updateEntity(1L, new ReleaseYearDTORequest(2001));
+
+        assertThat(releaseYear, is(equalTo(null)));
     }
 }
