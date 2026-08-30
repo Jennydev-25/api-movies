@@ -2,6 +2,7 @@ package dev.jenny.apimovies.genre;
 
 import dev.jenny.apimovies.genre.builder.GenreEntityBuilder;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,6 +15,7 @@ public class GenreEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_genre")
     private Long id;
     private String name;
 

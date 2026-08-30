@@ -2,6 +2,7 @@ package dev.jenny.apimovies.releaseyear;
 
 import dev.jenny.apimovies.releaseyear.builder.ReleaseYearEntityBuilder;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,6 +15,7 @@ public class ReleaseYearEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_release_year")
     private Long id;
     private Integer releaseYear;
 

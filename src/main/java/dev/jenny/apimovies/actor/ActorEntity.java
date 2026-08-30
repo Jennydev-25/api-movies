@@ -2,6 +2,7 @@ package dev.jenny.apimovies.actor;
 
 import dev.jenny.apimovies.actor.builder.ActorEntityBuilder;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,6 +17,7 @@ public class ActorEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_actor")
     private Long id;
     private String name;
     private String nationality;
