@@ -1,0 +1,31 @@
+package dev.jenny.apimovies.movie;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+
+import java.time.LocalDate;
+import java.util.Set;
+
+import dev.jenny.apimovies.actor.ActorEntity;
+import dev.jenny.apimovies.genre.GenreEntity;
+import dev.jenny.apimovies.releaseyear.ReleaseYearEntity;
+
+import org.junit.jupiter.api.Test;
+
+class MovieEntityTest {
+
+    @Test
+    void testMovieEntity_InitializationWithAllFields() {
+        GenreEntity genre = new GenreEntity(1L, "Drama");
+        ReleaseYearEntity releaseYear = new ReleaseYearEntity(1L, 2008);
+        ActorEntity actor = new ActorEntity(1L, "Robert Downey Jr.", "American", LocalDate.of(1965, 4, 4));
+
+        MovieEntity movie = new MovieEntity(1L, "El niño con el pijama de rayas", Set.of(genre), releaseYear,
+                Set.of(actor));
+
+        assertThat(movie, is(instanceOf(MovieEntity.class)));
+        assertThat(movie.getClass().getDeclaredFields().length, is(equalTo(5)));
+    }
+}
