@@ -4,11 +4,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
 import java.util.Optional;
 
+import dev.jenny.apimovies.releaseyear.dtos.ReleaseYearDTORequest;
 import dev.jenny.apimovies.releaseyear.dtos.ReleaseYearDTOResponse;
 import dev.jenny.apimovies.releaseyear.exceptions.ReleaseYearExceptionNotFound;
 
@@ -57,5 +59,18 @@ class ReleaseYearServiceImplTest {
                 () -> service.getById(1L));
 
         assertThat(exception.getMessage(), is(equalTo("Release year not found. Id 1 does not exist.")));
+    }
+
+    @Test
+    void testStoreEntity_ShouldSaveAndReturnReleaseYear() {
+        ReleaseYearDTORequest dtoRequest = new ReleaseYearDTORequest(1994);
+        ReleaseYearEntity releaseYearSaved = new ReleaseYearEntity(1L, 1994);
+
+        when(repository.save(any(ReleaseYearEntity.class))).thenReturn(releaseYearSaved);
+
+        ReleaseYearDTOResponse releaseYear = service.storeEntity(dtoRequest);
+
+        assertThat(releaseYear.id(), is(equalTo(1L)));
+        assertThat(releaseYear.releaseYear(), is(equalTo(1994)));
     }
 }
