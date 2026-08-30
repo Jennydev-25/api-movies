@@ -4,6 +4,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Modifier;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -32,5 +34,13 @@ class MovieMapperTest {
         assertThat(dto.genreNames(), is(equalTo(Set.of("Drama"))));
         assertThat(dto.releaseYear(), is(equalTo(2008)));
         assertThat(dto.actorNames(), is(equalTo(Set.of("Jack Scanlon"))));
+    }
+
+    @Test
+    void testConstructor_ShouldBePrivate() throws Exception {
+        Constructor<MovieMapper> constructor = MovieMapper.class.getDeclaredConstructor();
+        assertThat(Modifier.isPrivate(constructor.getModifiers()), is(equalTo(true)));
+        constructor.setAccessible(true);
+        constructor.newInstance();
     }
 }
