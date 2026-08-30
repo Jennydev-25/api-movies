@@ -16,6 +16,7 @@ import java.util.stream.Stream;
 
 import dev.jenny.apimovies.actor.dtos.ActorDTORequest;
 import dev.jenny.apimovies.actor.dtos.ActorDTOResponse;
+import dev.jenny.apimovies.actor.exceptions.ActorException;
 import dev.jenny.apimovies.actor.exceptions.ActorExceptionNotFound;
 import dev.jenny.apimovies.implementations.InterfaceGenericEditService;
 
@@ -181,5 +182,20 @@ class ActorControllerTest {
         return Stream.of(
                 Arguments.of(new ActorExceptionNotFound("Actor not found. Id 1 does not exist."), 404),
                 Arguments.of(null, 409));
+    }
+
+    @ParameterizedTest
+    @MethodSource("exceptionScenarios")
+    void testGetById_ShouldHandleUnexpectedExceptions(Exception exception, int expectedStatus) throws Exception {
+        when(service.getById(1L)).thenThrow(exception);
+
+        mockMvc.perform(get("/api/v1/actors/1"))
+                .andExpect(status().is(expectedStatus));
+    }
+
+    private static Stream<Arguments> exceptionScenarios() {
+        return Stream.of(
+                Arguments.of(new ActorException("Invalid actor operation"), 400),
+                Arguments.of(new RuntimeException("Unexpected error"), 500));
     }
 }
