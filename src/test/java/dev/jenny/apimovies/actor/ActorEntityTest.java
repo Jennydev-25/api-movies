@@ -26,4 +26,19 @@ class ActorEntityTest {
         assertThat(actor.getNationality(), is(equalTo("American")));
         assertThat(actor.getBirthDate(), is(equalTo(LocalDate.of(1965, 4, 4))));
     }
+
+    @Test
+    void testActorEntity_Builder() {
+        ActorEntity actor = ActorEntity.builder()
+                .id(1L)
+                .name("Robert Downey Jr.")
+                .nationality("American")
+                .birthDate(LocalDate.of(1965, 4, 4))
+                .build();
+        assertThat(actor, instanceOf(ActorEntity.class));
+        assertThat(actor.getId(), is(equalTo(1L)));
+        assertThat(actor.getName(), is(equalTo("Robert Downey Jr.")));
+        assertThat(actor.getNationality(), is(equalTo("American")));
+        assertThat(actor.getBirthDate(), is(equalTo(LocalDate.of(1965, 4, 4))));
+    }
 }
