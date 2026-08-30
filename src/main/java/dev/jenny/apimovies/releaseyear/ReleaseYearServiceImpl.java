@@ -20,4 +20,10 @@ public class ReleaseYearServiceImpl implements InterfaceReleaseYearService {
                 .map(ReleaseYearMapper::toDTO)
                 .toList();
     }
+
+    @Override
+    public ReleaseYearDTOResponse getById(Long id) {
+        ReleaseYearEntity releaseYear = repository.findById(id).orElseThrow();
+        return ReleaseYearMapper.toDTO(releaseYear);
+    }
 }
