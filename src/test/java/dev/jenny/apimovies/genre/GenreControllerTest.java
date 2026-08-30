@@ -157,6 +157,30 @@ class GenreControllerTest {
     }
 
     @ParameterizedTest
+    @MethodSource("updateErrorScenarios")
+    void testUpdate_ShouldHandleErrors(RuntimeException exception, int expectedStatus) throws Exception {
+        GenreDTORequest dtoRequest = new GenreDTORequest("Terror");
+        String requestJson = mapper.writeValueAsString(dtoRequest);
+
+        if (exception != null) {
+            when(editService.updateEntity(1L, dtoRequest)).thenThrow(exception);
+        } else {
+            when(editService.updateEntity(1L, dtoRequest)).thenReturn(null);
+        }
+
+        mockMvc.perform(put("/api/v1/genres/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+                .andExpect(status().is(expectedStatus));
+    }
+
+    private static Stream<Arguments> updateErrorScenarios() {
+        return Stream.of(
+                Arguments.of(new GenreExceptionNotFound("Genre not found. Id 1 does not exist."), 404),
+                Arguments.of(null, 409));
+    }
+
+    @ParameterizedTest
     @MethodSource("exceptionScenarios")
     void testGetById_ShouldHandleUnexpectedExceptions(Exception exception, int expectedStatus) throws Exception {
         when(service.getById(1L)).thenThrow(exception);
