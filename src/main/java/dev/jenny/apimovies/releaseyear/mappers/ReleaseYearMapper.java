@@ -5,6 +5,9 @@ import dev.jenny.apimovies.releaseyear.dtos.ReleaseYearDTOResponse;
 
 public class ReleaseYearMapper {
 
+    private ReleaseYearMapper() {
+    }
+
     public static ReleaseYearDTOResponse toDTO(ReleaseYearEntity entity) {
         return new ReleaseYearDTOResponse(entity.getId(), entity.getReleaseYear());
     }
