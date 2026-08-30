@@ -44,4 +44,26 @@ class MovieEntityTest {
         assertThat(movie.getReleaseYear(), is(equalTo(releaseYear)));
         assertThat(movie.getActors(), is(equalTo(Set.of(actor))));
     }
+
+    @Test
+    void testMovieEntity_Builder() {
+        GenreEntity genre = new GenreEntity(1L, "Drama");
+        ReleaseYearEntity releaseYear = new ReleaseYearEntity(1L, 2008);
+        ActorEntity actor = new ActorEntity(1L, "Jack Scanlon", "English", LocalDate.of(1998, 8, 6));
+
+        MovieEntity movie = MovieEntity.builder()
+                .id(1L)
+                .title("El niño con el pijama de rayas")
+                .genres(Set.of(genre))
+                .releaseYear(releaseYear)
+                .actors(Set.of(actor))
+                .build();
+
+        assertThat(movie, instanceOf(MovieEntity.class));
+        assertThat(movie.getId(), is(equalTo(1L)));
+        assertThat(movie.getTitle(), is(equalTo("El niño con el pijama de rayas")));
+        assertThat(movie.getGenres(), is(equalTo(Set.of(genre))));
+        assertThat(movie.getReleaseYear(), is(equalTo(releaseYear)));
+        assertThat(movie.getActors(), is(equalTo(Set.of(actor))));
+    }
 }
