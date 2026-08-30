@@ -3,6 +3,7 @@ package dev.jenny.apimovies.movie;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
@@ -15,6 +16,7 @@ import dev.jenny.apimovies.actor.ActorRepository;
 import dev.jenny.apimovies.genre.GenreEntity;
 import dev.jenny.apimovies.genre.GenreRepository;
 import dev.jenny.apimovies.movie.dtos.MovieDTOResponse;
+import dev.jenny.apimovies.movie.exceptions.MovieExceptionNotFound;
 import dev.jenny.apimovies.releaseyear.ReleaseYearEntity;
 import dev.jenny.apimovies.releaseyear.ReleaseYearRepository;
 
@@ -72,5 +74,12 @@ class MovieServiceImplTest {
 
         assertThat(movie.id(), is(equalTo(1L)));
         assertThat(movie.title(), is(equalTo("El niño con el pijama de rayas")));
+    }
+
+    @Test
+    void testGetById_NotFound_ShouldThrowException() {
+        when(repository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(MovieExceptionNotFound.class, () -> service.getById(1L));
     }
 }
