@@ -87,4 +87,19 @@ class ReleaseYearServiceImplTest {
 
         assertThat(releaseYear, is(equalTo(null)));
     }
+
+    @Test
+    void testUpdateEntity_ShouldUpdateAndReturnReleaseYear() {
+        ReleaseYearDTORequest dtoRequest = new ReleaseYearDTORequest(2001);
+        ReleaseYearEntity releaseYearUpdated = new ReleaseYearEntity(1L, 2001);
+
+        when(repository.existsById(1L)).thenReturn(true);
+        when(repository.existsByReleaseYearAndIdNot(2001, 1L)).thenReturn(false);
+        when(repository.save(any(ReleaseYearEntity.class))).thenReturn(releaseYearUpdated);
+
+        ReleaseYearDTOResponse releaseYear = service.updateEntity(1L, dtoRequest);
+
+        assertThat(releaseYear.id(), is(equalTo(1L)));
+        assertThat(releaseYear.releaseYear(), is(equalTo(2001)));
+    }
 }
