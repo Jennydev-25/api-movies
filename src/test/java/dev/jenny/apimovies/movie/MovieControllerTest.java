@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import dev.jenny.apimovies.movie.exceptions.MovieExceptionNotFound;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -88,5 +90,27 @@ class MovieControllerTest {
 
         assertThat(response.getStatus(), is(equalTo(404)));
         assertThat(response.getContentAsString(), is(equalTo(errorMessage)));
+    }
+
+    @Test
+    void testStore_ShouldReturnCreated() throws Exception {
+        MovieDTORequest dtoRequest = new MovieDTORequest("El niño con el pijama de rayas", Set.of(1L), 1L,
+                Set.of(1L));
+        MovieDTOResponse dtoResponse = new MovieDTOResponse(1L, "El niño con el pijama de rayas", Set.of("Drama"),
+                2008, Set.of("Jack Scanlon"));
+        String requestJson = mapper.writeValueAsString(dtoRequest);
+        String responseJson = mapper.writeValueAsString(dtoResponse);
+
+        when(editService.storeEntity(dtoRequest)).thenReturn(dtoResponse);
+
+        MockHttpServletResponse response = mockMvc.perform(post("/api/v1/movies")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+                .andExpect(status().isCreated())
+                .andReturn()
+                .getResponse();
+
+        assertThat(response.getStatus(), is(equalTo(201)));
+        assertThat(response.getContentAsString(), is(equalTo(responseJson)));
     }
 }
