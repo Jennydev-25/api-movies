@@ -92,7 +92,8 @@ class ReleaseYearServiceImplTest {
     void testUpdateEntity_ShouldUpdateAndReturnReleaseYear() {
         ReleaseYearDTORequest dtoRequest = new ReleaseYearDTORequest(2001);
         ReleaseYearEntity releaseYearUpdated = new ReleaseYearEntity(1L, 2001);
-
+        
+        when(repository.existsById(1L)).thenReturn(true);
         when(repository.save(any(ReleaseYearEntity.class))).thenReturn(releaseYearUpdated);
 
         ReleaseYearDTOResponse releaseYear = service.updateEntity(1L, dtoRequest);
