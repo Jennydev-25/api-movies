@@ -160,4 +160,12 @@ class MovieServiceImplTest {
 
         assertThat(movie, is(equalTo(null)));
     }
+
+    @Test
+    void testUpdateEntity_NotFound_ShouldThrowException() {
+        when(repository.existsById(1L)).thenReturn(false);
+
+        assertThrows(MovieExceptionNotFound.class, () -> service.updateEntity(1L,
+                new MovieDTORequest("El niño con el pijama de rayas", Set.of(1L), 1L, Set.of(1L))));
+    }
 }
