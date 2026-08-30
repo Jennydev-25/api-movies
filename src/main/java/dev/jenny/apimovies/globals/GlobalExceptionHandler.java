@@ -3,6 +3,8 @@ package dev.jenny.apimovies.globals;
 import java.util.HashMap;
 import java.util.Map;
 
+import dev.jenny.apimovies.actor.exceptions.ActorException;
+import dev.jenny.apimovies.actor.exceptions.ActorExceptionNotFound;
 import dev.jenny.apimovies.genre.exceptions.GenreException;
 import dev.jenny.apimovies.genre.exceptions.GenreExceptionNotFound;
 import dev.jenny.apimovies.releaseyear.exceptions.ReleaseYearException;
@@ -34,6 +36,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ReleaseYearException.class)
     public ResponseEntity<String> handleReleaseYearException(ReleaseYearException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+    }
+
+    @ExceptionHandler(ActorExceptionNotFound.class)
+    public ResponseEntity<String> handleActorNotFound(ActorExceptionNotFound exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+    }
+
+    @ExceptionHandler(ActorException.class)
+    public ResponseEntity<String> handleActorException(ActorException exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
 
