@@ -182,4 +182,14 @@ class ReleaseYearControllerTest {
                 Arguments.of(new ReleaseYearException("Invalid release year operation"), 400),
                 Arguments.of(new RuntimeException("Unexpected error"), 500));
     }
+
+    @Test
+    void testStore_ShouldReturnBadRequest_WhenReleaseYearIsNull() throws Exception {
+        String invalidJson = "{\"releaseYear\":null}";
+
+        mockMvc.perform(post("/api/v1/release-years")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(invalidJson))
+                .andExpect(status().isBadRequest());
+    }
 }
