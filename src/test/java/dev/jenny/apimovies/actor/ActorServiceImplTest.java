@@ -4,12 +4,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import dev.jenny.apimovies.actor.dtos.ActorDTORequest;
 import dev.jenny.apimovies.actor.dtos.ActorDTOResponse;
 import dev.jenny.apimovies.actor.exceptions.ActorExceptionNotFound;
 
@@ -54,5 +56,15 @@ class ActorServiceImplTest {
         ActorExceptionNotFound exception = assertThrows(ActorExceptionNotFound.class,
                 () -> service.getById(1L));
         assertThat(exception.getMessage(), is(equalTo("Actor not found. Id 1 does not exist.")));
+    }
+
+    @Test
+    void testStoreEntity_ShouldSaveAndReturnActor() {
+        ActorDTORequest dtoRequest = new ActorDTORequest("Robert Downey Jr.", "American", LocalDate.of(1965, 4, 4));
+        ActorEntity actorSaved = new ActorEntity(1L, "Robert Downey Jr.", "American", LocalDate.of(1965, 4, 4));
+        when(repository.save(any(ActorEntity.class))).thenReturn(actorSaved);
+        ActorDTOResponse actor = service.storeEntity(dtoRequest);
+        assertThat(actor.id(), is(equalTo(1L)));
+        assertThat(actor.name(), is(equalTo("Robert Downey Jr.")));
     }
 }
