@@ -44,4 +44,10 @@ public class ReleaseYearServiceImpl implements InterfaceReleaseYearService {
         ReleaseYearEntity releaseYearSaved = repository.save(releaseYearToSave);
         return ReleaseYearMapper.toDTO(releaseYearSaved);
     }
+
+    public ReleaseYearDTOResponse updateEntity(Long id, ReleaseYearDTORequest dto) {
+        ReleaseYearEntity releaseYearToUpdate = new ReleaseYearEntity(id, dto.releaseYear());
+        ReleaseYearEntity releaseYearUpdated = repository.save(releaseYearToUpdate);
+        return ReleaseYearMapper.toDTO(releaseYearUpdated);
+    }
 }
