@@ -112,4 +112,16 @@ class GenreServiceImplTest {
 
         assertThat(exception.getMessage(), is(equalTo("Genre not found. Id 1 does not exist.")));
     }
+
+    @Test
+    void testUpdateEntity_ShouldReturnNull_WhenNameAlreadyExistsInAnotherGenre() {
+        GenreDTORequest dtoRequest = new GenreDTORequest("Terror");
+
+        when(repository.existsById(1L)).thenReturn(true);
+        when(repository.existsByNameAndIdNot("Terror", 1L)).thenReturn(true);
+
+        GenreDTOResponse genre = service.updateEntity(1L, dtoRequest);
+
+        assertThat(genre, is(equalTo(null)));
+    }
 }
