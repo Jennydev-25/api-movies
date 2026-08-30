@@ -127,4 +127,14 @@ class MovieControllerTest {
                 .content(requestJson))
                 .andExpect(status().isConflict());
     }
+
+    @Test
+    void testStore_ShouldReturnBadRequest_WhenTitleIsBlank() throws Exception {
+        MovieDTORequest request = new MovieDTORequest("", Set.of(1L), 1L, Set.of(1L));
+
+        mockMvc.perform(post("/api/v1/movies")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
+    }
 }
