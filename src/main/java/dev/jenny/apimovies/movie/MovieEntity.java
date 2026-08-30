@@ -51,4 +51,24 @@ public class MovieEntity {
         this.releaseYear = releaseYear;
         this.actors = actors;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public Set<GenreEntity> getGenres() {
+        return genres;
+    }
+
+    public ReleaseYearEntity getReleaseYear() {
+        return releaseYear;
+    }
+
+    public Set<ActorEntity> getActors() {
+        return actors;
+    }
 }
