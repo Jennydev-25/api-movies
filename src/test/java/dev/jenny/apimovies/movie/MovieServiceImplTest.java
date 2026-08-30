@@ -107,4 +107,27 @@ class MovieServiceImplTest {
         assertThat(movie.id(), is(equalTo(1L)));
         assertThat(movie.title(), is(equalTo("El niño con el pijama de rayas")));
     }
+
+    @Test
+    void testUpdateEntity_ShouldUpdateAndReturnMovie() {
+        GenreEntity genre = new GenreEntity(1L, "Drama");
+        ReleaseYearEntity releaseYear = new ReleaseYearEntity(1L, 2008);
+        ActorEntity actor = new ActorEntity(1L, "Jack Scanlon", "English", LocalDate.of(1998, 8, 6));
+
+        MovieDTORequest dtoRequest = new MovieDTORequest("El niño con el pijama de rayas", Set.of(1L), 1L,
+                Set.of(1L));
+        MovieEntity movieUpdated = new MovieEntity(1L, "El niño con el pijama de rayas", Set.of(genre), releaseYear,
+                Set.of(actor));
+
+        when(repository.existsById(1L)).thenReturn(true);
+        when(releaseYearRepository.findById(1L)).thenReturn(Optional.of(releaseYear));
+        when(genreRepository.findAllById(Set.of(1L))).thenReturn(List.of(genre));
+        when(actorRepository.findAllById(Set.of(1L))).thenReturn(List.of(actor));
+        when(repository.save(any(MovieEntity.class))).thenReturn(movieUpdated);
+
+        MovieDTOResponse movie = service.updateEntity(1L, dtoRequest);
+
+        assertThat(movie.id(), is(equalTo(1L)));
+        assertThat(movie.title(), is(equalTo("El niño con el pijama de rayas")));
+    }
 }
