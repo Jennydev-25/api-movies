@@ -101,4 +101,15 @@ class GenreServiceImplTest {
         assertThat(genre.name(), is(equalTo("Suspense")));
     }
 
+    @Test
+    void testUpdateEntity_NotFound_ShouldThrowException() {
+        GenreDTORequest dtoRequest = new GenreDTORequest("Suspense");
+
+        when(repository.existsById(1L)).thenReturn(false);
+
+        GenreExceptionNotFound exception = assertThrows(GenreExceptionNotFound.class,
+                () -> service.updateEntity(1L, dtoRequest));
+
+        assertThat(exception.getMessage(), is(equalTo("Genre not found. Id 1 does not exist.")));
+    }
 }
