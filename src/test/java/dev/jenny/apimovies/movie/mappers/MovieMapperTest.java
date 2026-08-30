@@ -12,6 +12,7 @@ import java.util.Set;
 import dev.jenny.apimovies.actor.ActorEntity;
 import dev.jenny.apimovies.genre.GenreEntity;
 import dev.jenny.apimovies.movie.MovieEntity;
+import dev.jenny.apimovies.movie.dtos.MovieDTORequest;
 import dev.jenny.apimovies.movie.dtos.MovieDTOResponse;
 import dev.jenny.apimovies.releaseyear.ReleaseYearEntity;
 
@@ -42,5 +43,20 @@ class MovieMapperTest {
         assertThat(Modifier.isPrivate(constructor.getModifiers()), is(equalTo(true)));
         constructor.setAccessible(true);
         constructor.newInstance();
+    }
+
+    @Test
+    void testToEntity() {
+        GenreEntity genre = new GenreEntity(1L, "Drama");
+        ReleaseYearEntity releaseYear = new ReleaseYearEntity(1L, 2008);
+        ActorEntity actor = new ActorEntity(1L, "Jack Scanlon", "English", LocalDate.of(1998, 8, 6));
+        MovieDTORequest dto = new MovieDTORequest("El niño con el pijama de rayas", Set.of(1L), 1L, Set.of(1L));
+
+        MovieEntity movie = MovieMapper.toEntity(dto, Set.of(genre), releaseYear, Set.of(actor));
+
+        assertThat(movie.getTitle(), is(equalTo("El niño con el pijama de rayas")));
+        assertThat(movie.getGenres(), is(equalTo(Set.of(genre))));
+        assertThat(movie.getReleaseYear(), is(equalTo(releaseYear)));
+        assertThat(movie.getActors(), is(equalTo(Set.of(actor))));
     }
 }
