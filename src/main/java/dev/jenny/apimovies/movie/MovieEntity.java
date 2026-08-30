@@ -4,6 +4,7 @@ import java.util.Set;
 
 import dev.jenny.apimovies.actor.ActorEntity;
 import dev.jenny.apimovies.genre.GenreEntity;
+import dev.jenny.apimovies.movie.builder.MovieEntityBuilder;
 import dev.jenny.apimovies.releaseyear.ReleaseYearEntity;
 
 import jakarta.persistence.Column;
@@ -70,5 +71,29 @@ public class MovieEntity {
 
     public Set<ActorEntity> getActors() {
         return actors;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setGenres(Set<GenreEntity> genres) {
+        this.genres = genres;
+    }
+
+    public void setReleaseYear(ReleaseYearEntity releaseYear) {
+        this.releaseYear = releaseYear;
+    }
+
+    public void setActors(Set<ActorEntity> actors) {
+        this.actors = actors;
+    }
+
+    public static MovieEntityBuilder builder() {
+        return new MovieEntityBuilder();
     }
 }
