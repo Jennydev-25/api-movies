@@ -5,6 +5,7 @@ import java.util.List;
 import dev.jenny.apimovies.movie.dtos.MovieDTOResponse;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,5 +22,10 @@ public class MovieController {
     @GetMapping("")
     public List<MovieDTOResponse> index() {
         return service.getEntities();
+    }
+
+    @GetMapping("{id}")
+    public MovieDTOResponse getById(@PathVariable Long id) {
+        return service.getById(id);
     }
 }
