@@ -5,6 +5,8 @@ import java.util.Map;
 
 import dev.jenny.apimovies.genre.exceptions.GenreException;
 import dev.jenny.apimovies.genre.exceptions.GenreExceptionNotFound;
+import dev.jenny.apimovies.releaseyear.exceptions.ReleaseYearException;
+import dev.jenny.apimovies.releaseyear.exceptions.ReleaseYearExceptionNotFound;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(GenreException.class)
     public ResponseEntity<String> handleGenreException(GenreException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+    }
+
+    @ExceptionHandler(ReleaseYearExceptionNotFound.class)
+    public ResponseEntity<String> handleReleaseYearNotFound(ReleaseYearExceptionNotFound exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+    }
+
+    @ExceptionHandler(ReleaseYearException.class)
+    public ResponseEntity<String> handleReleaseYearException(ReleaseYearException exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
 
