@@ -28,4 +28,20 @@ public class ActorEntity {
         this.nationality = nationality;
         this.birthDate = birthDate;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getNationality() {
+        return nationality;
+    }
+
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
 }
