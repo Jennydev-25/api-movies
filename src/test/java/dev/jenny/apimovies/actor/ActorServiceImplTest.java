@@ -106,4 +106,16 @@ class ActorServiceImplTest {
 
         assertThat(exception.getMessage(), is(equalTo("Actor not found. Id 1 does not exist.")));
     }
+
+    @Test
+    void testUpdateEntity_ShouldReturnNull_WhenActorAlreadyExists() {
+        when(repository.existsById(1L)).thenReturn(true);
+        when(repository.existsByNameAndBirthDateAndIdNot("Robert Downey Jr.", LocalDate.of(1965, 4, 4), 1L))
+                .thenReturn(true);
+
+        ActorDTOResponse actor = service.updateEntity(1L,
+                new ActorDTORequest("Robert Downey Jr.", "American", LocalDate.of(1965, 4, 4)));
+
+        assertThat(actor, is(equalTo(null)));
+    }
 }
