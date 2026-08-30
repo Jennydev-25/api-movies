@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
@@ -116,5 +117,25 @@ class ReleaseYearControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
                 .andExpect(status().isConflict());
+    }
+
+    @Test
+    void testUpdate_ShouldReturnOk_WhenReleaseYearIsUpdated() throws Exception {
+        ReleaseYearDTORequest dtoRequest = new ReleaseYearDTORequest(2001);
+        ReleaseYearDTOResponse dtoResponse = new ReleaseYearDTOResponse(1L, 2001);
+        String requestJson = mapper.writeValueAsString(dtoRequest);
+        String responseJson = mapper.writeValueAsString(dtoResponse);
+
+        when(editService.updateEntity(1L, dtoRequest)).thenReturn(dtoResponse);
+
+        MockHttpServletResponse response = mockMvc.perform(put("/api/v1/release-years/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse();
+
+        assertThat(response.getStatus(), is(equalTo(200)));
+        assertThat(response.getContentAsString(), is(equalTo(responseJson)));
     }
 }
