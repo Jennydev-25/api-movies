@@ -3,8 +3,11 @@ package dev.jenny.apimovies.actor;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
@@ -20,6 +23,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Example;
 
 @ExtendWith(MockitoExtension.class)
 class ActorServiceImplTest {
@@ -66,5 +70,15 @@ class ActorServiceImplTest {
         ActorDTOResponse actor = service.storeEntity(dtoRequest);
         assertThat(actor.id(), is(equalTo(1L)));
         assertThat(actor.name(), is(equalTo("Robert Downey Jr.")));
+    }
+
+    @Test
+    void testStoreEntity_ShouldReturnNull_WhenActorAlreadyExists() {
+        ActorDTORequest dtoRequest = new ActorDTORequest("Robert Downey Jr.", "American", LocalDate.of(1965, 4, 4));
+        ActorEntity existingActor = new ActorEntity(1L, "Robert Downey Jr.", "American", LocalDate.of(1965, 4, 4));
+        when(repository.findAll(any(Example.class))).thenReturn(List.of(existingActor));
+        ActorDTOResponse actor = service.storeEntity(dtoRequest);
+        assertThat(actor, is(nullValue()));
+        verify(repository, never()).save(any(ActorEntity.class));
     }
 }
