@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,5 +48,14 @@ public class ActorController {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
 
         return ResponseEntity.status(201).body(dtoResponse);
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<ActorDTOResponse> update(@PathVariable Long id, @Valid @RequestBody ActorDTORequest actor) {
+        ActorDTOResponse actorDTOResponse = editService.updateEntity(id, actor);
+        if (actorDTOResponse == null) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+        return ResponseEntity.ok(actorDTOResponse);
     }
 }
