@@ -1,5 +1,7 @@
 package dev.jenny.apimovies.actor;
 
+import dev.jenny.apimovies.actor.builder.ActorEntityBuilder;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -43,5 +45,25 @@ public class ActorEntity {
 
     public LocalDate getBirthDate() {
         return birthDate;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public static ActorEntityBuilder builder() {
+        return new ActorEntityBuilder();
     }
 }
