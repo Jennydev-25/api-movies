@@ -7,6 +7,9 @@ import java.util.stream.Collectors;
 
 public class MovieMapper {
 
+    private MovieMapper() {
+    }
+
     public static MovieDTOResponse toDTO(MovieEntity entity) {
         return new MovieDTOResponse(
                 entity.getId(),
