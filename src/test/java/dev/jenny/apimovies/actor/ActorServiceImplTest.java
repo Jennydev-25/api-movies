@@ -3,6 +3,7 @@ package dev.jenny.apimovies.actor;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 import dev.jenny.apimovies.actor.dtos.ActorDTOResponse;
+import dev.jenny.apimovies.actor.exceptions.ActorExceptionNotFound;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,5 +46,13 @@ class ActorServiceImplTest {
         ActorDTOResponse actor = service.getById(1L);
         assertThat(actor.id(), is(equalTo(1L)));
         assertThat(actor.name(), is(equalTo("Robert Downey Jr.")));
+    }
+
+    @Test
+    void testGetById_NotFound_ShouldThrowException() {
+        when(repository.findById(1L)).thenReturn(Optional.empty());
+        ActorExceptionNotFound exception = assertThrows(ActorExceptionNotFound.class,
+                () -> service.getById(1L));
+        assertThat(exception.getMessage(), is(equalTo("Actor not found. Id 1 does not exist.")));
     }
 }
