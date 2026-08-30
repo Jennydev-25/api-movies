@@ -4,6 +4,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Modifier;
 import java.time.LocalDate;
 
 import dev.jenny.apimovies.actor.ActorEntity;
@@ -21,5 +23,13 @@ class ActorMapperTest {
         assertThat(dto.name(), is(equalTo("Robert Downey Jr.")));
         assertThat(dto.nationality(), is(equalTo("American")));
         assertThat(dto.birthDate(), is(equalTo(LocalDate.of(1965, 4, 4))));
+    }
+
+    @Test
+    void testConstructor_ShouldBePrivate() throws Exception {
+        Constructor<ActorMapper> constructor = ActorMapper.class.getDeclaredConstructor();
+        assertThat(Modifier.isPrivate(constructor.getModifiers()), is(equalTo(true)));
+        constructor.setAccessible(true);
+        constructor.newInstance();
     }
 }
