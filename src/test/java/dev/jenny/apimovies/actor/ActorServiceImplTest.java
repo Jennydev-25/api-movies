@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import dev.jenny.apimovies.actor.dtos.ActorDTOResponse;
 
@@ -34,5 +35,14 @@ class ActorServiceImplTest {
         List<ActorDTOResponse> actors = service.getEntities();
         assertThat(actors.size(), is(equalTo(2)));
         assertThat(actors.get(0).name(), is(equalTo("Robert Downey Jr.")));
+    }
+
+    @Test
+    void testGetById() {
+        ActorEntity actorMock = new ActorEntity(1L, "Robert Downey Jr.", "American", LocalDate.of(1965, 4, 4));
+        when(repository.findById(1L)).thenReturn(Optional.of(actorMock));
+        ActorDTOResponse actor = service.getById(1L);
+        assertThat(actor.id(), is(equalTo(1L)));
+        assertThat(actor.name(), is(equalTo("Robert Downey Jr.")));
     }
 }
