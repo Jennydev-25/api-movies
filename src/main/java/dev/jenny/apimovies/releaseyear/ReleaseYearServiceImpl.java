@@ -2,6 +2,7 @@ package dev.jenny.apimovies.releaseyear;
 
 import java.util.List;
 
+import dev.jenny.apimovies.implementations.InterfaceGenericEditService;
 import dev.jenny.apimovies.releaseyear.dtos.ReleaseYearDTORequest;
 import dev.jenny.apimovies.releaseyear.dtos.ReleaseYearDTOResponse;
 import dev.jenny.apimovies.releaseyear.exceptions.ReleaseYearExceptionNotFound;
@@ -10,7 +11,8 @@ import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ReleaseYearServiceImpl implements InterfaceReleaseYearService {
+public class ReleaseYearServiceImpl implements InterfaceReleaseYearService,
+        InterfaceGenericEditService<ReleaseYearDTORequest, ReleaseYearDTOResponse> {
     private final ReleaseYearRepository repository;
 
     public ReleaseYearServiceImpl(ReleaseYearRepository repository) {
@@ -32,6 +34,7 @@ public class ReleaseYearServiceImpl implements InterfaceReleaseYearService {
         return ReleaseYearMapper.toDTO(releaseYear);
     }
 
+    @Override
     public ReleaseYearDTOResponse storeEntity(ReleaseYearDTORequest dto) {
         ReleaseYearEntity releaseYearToSave = ReleaseYearMapper.toEntity(dto);
 
@@ -45,6 +48,7 @@ public class ReleaseYearServiceImpl implements InterfaceReleaseYearService {
         return ReleaseYearMapper.toDTO(releaseYearSaved);
     }
 
+    @Override
     public ReleaseYearDTOResponse updateEntity(Long id, ReleaseYearDTORequest dto) {
         ReleaseYearEntity releaseYearToUpdate = ReleaseYearMapper.toEntity(dto);
         releaseYearToUpdate.setId(id);
