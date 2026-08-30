@@ -23,4 +23,12 @@ class ReleaseYearMapperTest {
         assertThat(dto.id(), is(equalTo(1L)));
         assertThat(dto.releaseYear(), is(equalTo(1994)));
     }
+
+    @Test
+   void testConstructor_ShouldBePrivate() throws Exception {
+       Constructor<ReleaseYearMapper> constructor = ReleaseYearMapper.class.getDeclaredConstructor();
+       assertThat(Modifier.isPrivate(constructor.getModifiers()), is(equalTo(true)));
+       constructor.setAccessible(true);
+       constructor.newInstance();
+   }
 }
