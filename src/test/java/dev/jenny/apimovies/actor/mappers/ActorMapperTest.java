@@ -9,6 +9,7 @@ import java.lang.reflect.Modifier;
 import java.time.LocalDate;
 
 import dev.jenny.apimovies.actor.ActorEntity;
+import dev.jenny.apimovies.actor.dtos.ActorDTORequest;
 import dev.jenny.apimovies.actor.dtos.ActorDTOResponse;
 
 import org.junit.jupiter.api.Test;
@@ -31,5 +32,14 @@ class ActorMapperTest {
         assertThat(Modifier.isPrivate(constructor.getModifiers()), is(equalTo(true)));
         constructor.setAccessible(true);
         constructor.newInstance();
+    }
+
+    @Test
+    void testToEntity() {
+        ActorDTORequest dto = new ActorDTORequest("Robert Downey Jr.", "American", LocalDate.of(1965, 4, 4));
+        ActorEntity actor = ActorMapper.toEntity(dto);
+        assertThat(actor.getName(), is(equalTo("Robert Downey Jr.")));
+        assertThat(actor.getNationality(), is(equalTo("American")));
+        assertThat(actor.getBirthDate(), is(equalTo(LocalDate.of(1965, 4, 4))));
     }
 }
