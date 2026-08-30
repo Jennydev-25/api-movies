@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDate;
@@ -131,5 +132,26 @@ class ActorControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testUpdate_ShouldReturnOk_WhenActorIsUpdated() throws Exception {
+        ActorDTORequest dtoRequest = new ActorDTORequest("Robert Downey Jr.", "American", LocalDate.of(1965, 4, 4));
+        ActorDTOResponse dtoResponse = new ActorDTOResponse(1L, "Robert Downey Jr.", "American",
+                LocalDate.of(1965, 4, 4));
+        String requestJson = mapper.writeValueAsString(dtoRequest);
+        String responseJson = mapper.writeValueAsString(dtoResponse);
+
+        when(editService.updateEntity(1L, dtoRequest)).thenReturn(dtoResponse);
+
+        MockHttpServletResponse response = mockMvc.perform(put("/api/v1/actors/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse();
+
+        assertThat(response.getStatus(), is(equalTo(200)));
+        assertThat(response.getContentAsString(), is(equalTo(responseJson)));
     }
 }
