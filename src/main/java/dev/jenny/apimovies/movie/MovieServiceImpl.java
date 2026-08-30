@@ -3,6 +3,7 @@ package dev.jenny.apimovies.movie;
 import java.util.List;
 
 import dev.jenny.apimovies.movie.dtos.MovieDTOResponse;
+import dev.jenny.apimovies.movie.exceptions.MovieExceptionNotFound;
 import dev.jenny.apimovies.movie.mappers.MovieMapper;
 
 import org.springframework.stereotype.Service;
@@ -25,6 +26,9 @@ public class MovieServiceImpl implements InterfaceMovieService {
 
     @Override
     public MovieDTOResponse getById(Long id) {
-        return null;
+        MovieEntity movie = repository.findById(id)
+                .orElseThrow(() -> new MovieExceptionNotFound(
+                        "Movie not found. Id " + id + " does not exist."));
+        return MovieMapper.toDTO(movie);
     }
 }
