@@ -54,6 +54,10 @@ public class ReleaseYearServiceImpl implements InterfaceReleaseYearService,
             throw new ReleaseYearExceptionNotFound("Release year not found. Id " + id + " does not exist.");
         }
 
+        if (repository.existsByReleaseYearAndIdNot(dto.releaseYear(), id)) {
+            return null;
+        }
+
         ReleaseYearEntity releaseYearToUpdate = ReleaseYearMapper.toEntity(dto);
         releaseYearToUpdate.setId(id);
 
