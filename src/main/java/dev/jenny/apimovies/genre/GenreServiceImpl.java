@@ -49,6 +49,16 @@ public class GenreServiceImpl implements InterfaceGenreService,
 
     @Override
     public GenreDTOResponse updateEntity(Long id, GenreDTORequest dto) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        boolean genreExists = repository.existsById(id);
+        if (!genreExists)
+            throw new GenreExceptionNotFound("Genre not found. Id " + id + " does not exist.");
+
+        boolean nameExists = repository.existsByNameAndIdNot(dto.name(), id);
+        if (nameExists)
+            return null;
+
+        GenreEntity genreToUpdate = new GenreEntity(id, dto.name());
+        GenreEntity genreUpdated = repository.save(genreToUpdate);
+        return GenreMapper.toDTO(genreUpdated);
     }
 }
