@@ -22,4 +22,12 @@ public class ReleaseYearEntity {
         this.id = id;
         this.releaseYear = releaseYear;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Integer getReleaseYear() {
+        return releaseYear;
+    }
 }
