@@ -144,4 +144,20 @@ class MovieServiceImplTest {
 
         assertThat(movie, is(equalTo(null)));
     }
+
+    @Test
+    void testUpdateEntity_ShouldReturnNull_WhenMovieAlreadyExists() {
+        ReleaseYearEntity releaseYear = new ReleaseYearEntity(1L, 2008);
+        MovieDTORequest dtoRequest = new MovieDTORequest("El niño con el pijama de rayas", Set.of(1L), 1L,
+                Set.of(1L));
+
+        when(repository.existsById(1L)).thenReturn(true);
+        when(releaseYearRepository.findById(1L)).thenReturn(Optional.of(releaseYear));
+        when(repository.existsByTitleAndReleaseYearAndIdNot("El niño con el pijama de rayas", releaseYear, 1L))
+                .thenReturn(true);
+
+        MovieDTOResponse movie = service.updateEntity(1L, dtoRequest);
+
+        assertThat(movie, is(equalTo(null)));
+    }
 }
