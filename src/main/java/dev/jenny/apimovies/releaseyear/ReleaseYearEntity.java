@@ -1,5 +1,7 @@
 package dev.jenny.apimovies.releaseyear;
 
+import dev.jenny.apimovies.releaseyear.builder.ReleaseYearEntityBuilder;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,5 +31,17 @@ public class ReleaseYearEntity {
 
     public Integer getReleaseYear() {
         return releaseYear;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setReleaseYear(Integer releaseYear) {
+        this.releaseYear = releaseYear;
+    }
+
+    public static ReleaseYearEntityBuilder builder() {
+        return new ReleaseYearEntityBuilder();
     }
 }
