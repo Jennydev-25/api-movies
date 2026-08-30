@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.List;
 
 import dev.jenny.apimovies.releaseyear.dtos.ReleaseYearDTOResponse;
+import dev.jenny.apimovies.releaseyear.exceptions.ReleaseYearExceptionNotFound;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -60,5 +61,20 @@ class ReleaseYearControllerTest {
 
         assertThat(response.getStatus(), is(equalTo(200)));
         assertThat(response.getContentAsString(), is(equalTo(json)));
+    }
+
+    @Test
+    void testGetById_ShouldReturnNotFound_WhenReleaseYearDoesNotExist() throws Exception {
+        String errorMessage = "Release year not found. Id 99 does not exist.";
+
+        when(service.getById(99L)).thenThrow(new ReleaseYearExceptionNotFound(errorMessage));
+
+        MockHttpServletResponse response = mockMvc.perform(get("/api/v1/release-years/99"))
+                .andExpect(status().isNotFound())
+                .andReturn()
+                .getResponse();
+
+        assertThat(response.getStatus(), is(equalTo(404)));
+        assertThat(response.getContentAsString(), is(equalTo(errorMessage)));
     }
 }
