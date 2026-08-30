@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
+import java.util.Optional;
 
 import dev.jenny.apimovies.releaseyear.dtos.ReleaseYearDTOResponse;
 import org.junit.jupiter.api.Test;
@@ -32,5 +33,16 @@ class ReleaseYearServiceImplTest {
 
         assertThat(releaseYears.size(), is(equalTo(2)));
         assertThat(releaseYears.get(0).releaseYear(), is(equalTo(1994)));
+    }
+
+    @Test
+    void testGetById() {
+        ReleaseYearEntity releaseYearMock = new ReleaseYearEntity(1L, 1994);
+
+        when(repository.findById(1L)).thenReturn(Optional.of(releaseYearMock));
+        ReleaseYearDTOResponse releaseYear = service.getById(1L);
+
+        assertThat(releaseYear.id(), is(equalTo(1L)));
+        assertThat(releaseYear.releaseYear(), is(equalTo(1994)));
     }
 }
