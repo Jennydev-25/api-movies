@@ -122,4 +122,14 @@ class ActorControllerTest {
                 .content(requestJson))
                 .andExpect(status().isConflict());
     }
+
+    @Test
+    void testStore_ShouldReturnBadRequest_WhenNameIsBlank() throws Exception {
+        ActorDTORequest request = new ActorDTORequest("", "American", LocalDate.of(1965, 4, 4));
+
+        mockMvc.perform(post("/api/v1/actors")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
+    }
 }
