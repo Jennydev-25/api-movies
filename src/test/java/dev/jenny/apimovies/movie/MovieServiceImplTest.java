@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import dev.jenny.apimovies.actor.ActorEntity;
@@ -55,5 +56,21 @@ class MovieServiceImplTest {
 
         assertThat(movies.size(), is(equalTo(1)));
         assertThat(movies.get(0).title(), is(equalTo("El niño con el pijama de rayas")));
+    }
+
+    @Test
+    void testGetById() {
+        GenreEntity genre = new GenreEntity(1L, "Drama");
+        ReleaseYearEntity releaseYear = new ReleaseYearEntity(1L, 2008);
+        ActorEntity actor = new ActorEntity(1L, "Jack Scanlon", "English", LocalDate.of(1998, 8, 6));
+        MovieEntity movieMock = new MovieEntity(1L, "El niño con el pijama de rayas", Set.of(genre), releaseYear,
+                Set.of(actor));
+
+        when(repository.findById(1L)).thenReturn(Optional.of(movieMock));
+
+        MovieDTOResponse movie = service.getById(1L);
+
+        assertThat(movie.id(), is(equalTo(1L)));
+        assertThat(movie.title(), is(equalTo("El niño con el pijama de rayas")));
     }
 }
