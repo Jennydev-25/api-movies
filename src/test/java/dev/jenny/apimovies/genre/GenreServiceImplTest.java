@@ -85,4 +85,20 @@ class GenreServiceImplTest {
 
         assertThat(genre, is(equalTo(null)));
     }
+
+    @Test
+    void testUpdateEntity_ShouldUpdateAndReturnGenre() {
+        GenreDTORequest dtoRequest = new GenreDTORequest("Suspense");
+        GenreEntity genreUpdated = new GenreEntity(1L, "Suspense");
+
+        when(repository.existsById(1L)).thenReturn(true);
+        when(repository.existsByNameAndIdNot("Suspense", 1L)).thenReturn(false);
+        when(repository.save(any(GenreEntity.class))).thenReturn(genreUpdated);
+
+        GenreDTOResponse genre = service.updateEntity(1L, dtoRequest);
+
+        assertThat(genre.id(), is(equalTo(1L)));
+        assertThat(genre.name(), is(equalTo("Suspense")));
+    }
+
 }
