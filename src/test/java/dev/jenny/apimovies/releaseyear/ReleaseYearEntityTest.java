@@ -16,4 +16,12 @@ class ReleaseYearEntityTest {
         assertThat(releaseYear, is(instanceOf(ReleaseYearEntity.class)));
         assertThat(releaseYear.getClass().getDeclaredFields().length, is(equalTo(2)));
     }
+
+    @Test
+    void testReleaseYearEntity() {
+        ReleaseYearEntity releaseYear = new ReleaseYearEntity(1L, 1994);
+
+        assertThat(releaseYear.getId(), is(equalTo(1L)));
+        assertThat(releaseYear.getReleaseYear(), is(equalTo(1994)));
+    }
 }
