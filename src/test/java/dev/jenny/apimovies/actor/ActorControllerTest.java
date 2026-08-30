@@ -13,6 +13,7 @@ import java.util.List;
 
 import dev.jenny.apimovies.actor.dtos.ActorDTORequest;
 import dev.jenny.apimovies.actor.dtos.ActorDTOResponse;
+import dev.jenny.apimovies.actor.exceptions.ActorExceptionNotFound;
 import dev.jenny.apimovies.implementations.InterfaceGenericEditService;
 
 import org.junit.jupiter.api.Test;
@@ -69,5 +70,20 @@ class ActorControllerTest {
 
         assertThat(response.getStatus(), is(equalTo(200)));
         assertThat(response.getContentAsString(), is(equalTo(json)));
+    }
+
+    @Test
+    void testGetById_ShouldReturnNotFound_WhenActorDoesNotExist() throws Exception {
+        String errorMessage = "Actor not found. Id 99 does not exist.";
+
+        when(service.getById(99L)).thenThrow(new ActorExceptionNotFound(errorMessage));
+
+        MockHttpServletResponse response = mockMvc.perform(get("/api/v1/actors/99"))
+                .andExpect(status().isNotFound())
+                .andReturn()
+                .getResponse();
+
+        assertThat(response.getStatus(), is(equalTo(404)));
+        assertThat(response.getContentAsString(), is(equalTo(errorMessage)));
     }
 }
