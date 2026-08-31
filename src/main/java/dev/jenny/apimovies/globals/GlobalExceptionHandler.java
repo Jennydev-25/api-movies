@@ -7,6 +7,8 @@ import dev.jenny.apimovies.actor.exceptions.ActorException;
 import dev.jenny.apimovies.actor.exceptions.ActorExceptionNotFound;
 import dev.jenny.apimovies.genre.exceptions.GenreException;
 import dev.jenny.apimovies.genre.exceptions.GenreExceptionNotFound;
+import dev.jenny.apimovies.movie.exceptions.MovieException;
+import dev.jenny.apimovies.movie.exceptions.MovieExceptionNotFound;
 import dev.jenny.apimovies.releaseyear.exceptions.ReleaseYearException;
 import dev.jenny.apimovies.releaseyear.exceptions.ReleaseYearExceptionNotFound;
 
@@ -46,6 +48,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ActorException.class)
     public ResponseEntity<String> handleActorException(ActorException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+    }
+
+    @ExceptionHandler(MovieExceptionNotFound.class)
+    public ResponseEntity<String> handleMovieNotFound(MovieExceptionNotFound exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+    }
+
+    @ExceptionHandler(MovieException.class)
+    public ResponseEntity<String> handleMovieException(MovieException exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
 
