@@ -22,6 +22,7 @@ import dev.jenny.apimovies.movie.dtos.MovieDTOResponse;
 import dev.jenny.apimovies.movie.exceptions.MovieExceptionNotFound;
 import dev.jenny.apimovies.releaseyear.ReleaseYearEntity;
 import dev.jenny.apimovies.releaseyear.ReleaseYearRepository;
+import dev.jenny.apimovies.releaseyear.exceptions.ReleaseYearExceptionNotFound;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -224,5 +225,33 @@ class MovieServiceImplTest {
         List<MovieDTOResponse> movies = service.findBy(null, null);
 
         assertThat(movies.size(), is(equalTo(1)));
+    }
+
+    @Test
+    void testStoreEntity_ReleaseYearNotFound_ShouldThrowException() {
+        MovieDTORequest dtoRequest = new MovieDTORequest("El niño con el pijama de rayas", Set.of(1L), 1L,
+                Set.of(1L));
+
+        when(releaseYearRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(ReleaseYearExceptionNotFound.class, () -> service.storeEntity(dtoRequest));
+    }
+
+    @Test
+    void testUpdateEntity_ReleaseYearNotFound_ShouldThrowException() {
+        MovieDTORequest dtoRequest = new MovieDTORequest("El niño con el pijama de rayas", Set.of(1L), 1L,
+                Set.of(1L));
+
+        when(repository.existsById(1L)).thenReturn(true);
+        when(releaseYearRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(ReleaseYearExceptionNotFound.class, () -> service.updateEntity(1L, dtoRequest));
+    }
+
+    @Test
+    void testDeleteById_NotFound_ShouldThrowException() {
+        when(repository.existsById(1L)).thenReturn(false);
+
+        assertThrows(MovieExceptionNotFound.class, () -> service.deleteById(1L));
     }
 }
