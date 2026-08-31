@@ -198,4 +198,21 @@ class MovieControllerTest {
 
         verify(service).deleteById(1L);
     }
+
+    @Test
+    void testSearch_ShouldReturnMoviesByTitle() throws Exception {
+        MovieDTOResponse dtoResponse = new MovieDTOResponse(1L, "El niño con el pijama de rayas", Set.of("Drama"),
+                2008, Set.of("Jack Scanlon"));
+        String responseJson = mapper.writeValueAsString(List.of(dtoResponse));
+
+        when(service.findBy("pijama", null)).thenReturn(List.of(dtoResponse));
+
+        MockHttpServletResponse response = mockMvc.perform(get("/api/v1/movies/search").param("title", "pijama"))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse();
+
+        assertThat(response.getStatus(), is(equalTo(200)));
+        assertThat(response.getContentAsString(), is(equalTo(responseJson)));
+    }
 }
