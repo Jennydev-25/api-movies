@@ -13,6 +13,7 @@
 - [Modelado de datos y relaciones](#-modelado-de-datos-y-relaciones)
 - [Diagramas](#-diagramas)
 - [Testing](#-testing)
+- [Cobertura de tests](#-cobertura-de-tests)
 - [Tecnologías](#-tecnologías)
 - [Autora](#-autora)
 
@@ -261,6 +262,26 @@ Además, `AppTest` levanta el contexto completo de Spring Boot (`@SpringBootTest
 | `release_year` | Mapper     | ![](assets/images/test-explorer/release-year-mapper-tests.png)     |
 
 > **Nota:** el Test Explorer de VS Code muestra 124/124, mientras que la tabla de totales de más arriba indica 111. La diferencia es porque VS Code cuenta cada caso de los tests parametrizados (`@ParameterizedTest`) como una entrada aparte además del test padre; el número real de tests ejecutados, según Maven Surefire, es 111.
+
+[Volver al índice](#-índice)
+
+---
+
+## 📈 Cobertura de tests
+
+El proyecto mantiene el 100% de cobertura en instrucciones, ramas, líneas y métodos, medido con JaCoCo. La clase de arranque de Spring Boot (`App.class`, que solo contiene el `main`) se excluye de la medición por ser código de arranque sin lógica propia (ver `pom.xml`)
+
+| Métrica           | Cobertura  |
+| ----------------- | ---------- |
+| Instrucciones     | 100 %      |
+| Ramas             | 100 %      |
+| Líneas            | 357 de 357 |
+| Métodos           | 147 de 147 |
+| Clases analizadas | 37         |
+
+![Reporte de cobertura JaCoCo](assets/images/coverage/coverage-jacoco.png)
+
+> El reporte completo, navegable por clase, se genera en `target/site/jacoco/index.html` tras ejecutar `./mvnw clean test` (ver [Cómo reproducir el proyecto](#-cómo-reproducir-el-proyecto))
 
 [Volver al índice](#-índice)
 
