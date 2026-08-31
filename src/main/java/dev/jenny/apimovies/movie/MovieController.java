@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -35,6 +36,12 @@ public class MovieController {
     @GetMapping("")
     public List<MovieDTOResponse> index() {
         return service.getEntities();
+    }
+
+    @GetMapping("search")
+    public List<MovieDTOResponse> search(@RequestParam(required = false) String title,
+            @RequestParam(required = false) String genre) {
+        return service.findBy(title, genre);
     }
 
     @GetMapping("{id}")
