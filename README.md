@@ -12,6 +12,7 @@
 - [Cómo reproducir el proyecto](#-cómo-reproducir-el-proyecto)
 - [Modelado de datos y relaciones](#-modelado-de-datos-y-relaciones)
 - [Diagramas](#-diagramas)
+- [Testing](#-testing)
 - [Tecnologías](#-tecnologías)
 - [Autora](#-autora)
 
@@ -215,6 +216,51 @@ ACTORS ||--o{ MOVIES_ACTORS : "acts_in"
 \`\`\`
 
 </details>
+
+[Volver al índice](#-índice)
+
+---
+
+## 🧪 Testing
+
+El proyecto sigue TDD con JUnit 5, Mockito y Hamcrest. Cada entidad tiene su propia batería de tests por capa:
+
+- **Controller** — `@WebMvcTest` + `MockMvc`, simulando peticiones HTTP y verificando respuestas y códigos de estado.
+- **Service** — `@ExtendWith(MockitoExtension.class)`, mockeando el repositorio para aislar la lógica de negocio.
+- **Entity** — tests unitarios sobre constructores, getters y setters.
+- **Mapper** — verifican la conversión correcta entre entidad y DTO.
+
+Además, `AppTest` levanta el contexto completo de Spring Boot (`@SpringBootTest`), comprobando que la aplicación arranca correctamente con el esquema y los datos semilla ya cargados.
+
+| Paquete                               | Controller | Service | Entity | Mapper | Total   |
+| ------------------------------------- | ---------- | ------- | ------ | ------ | ------- |
+| `genre`                               | 11         | 8       | 3      | 3      | 25      |
+| `actor`                               | 11         | 8       | 3      | 3      | 25      |
+| `releaseyear`                         | 11         | 8       | 3      | 3      | 25      |
+| `movie`                               | 14         | 15      | 3      | 3      | 35      |
+| Arranque de la aplicación (`AppTest`) | —          | —       | —      | —      | 1       |
+| **Total**                             |            |         |        |        | **111** |
+
+### 🖥️ Capturas del Test Explorer
+
+![Vista general del Test Explorer](assets/images/test-explorer/test-explorer-overview.png)
+
+| Paquete        | Clase      | Captura                                                            |
+| -------------- | ---------- | ------------------------------------------------------------------ |
+| `genre`        | Controller | ![](assets/images/test-explorer/genre-controller-tests.png)        |
+| `genre`        | Service    | ![](assets/images/test-explorer/genre-service-tests.png)           |
+| `genre`        | Entity     | ![](assets/images/test-explorer/genre-entity-tests.png)            |
+| `genre`        | Mapper     | ![](assets/images/test-explorer/genre-mapper-tests.png)            |
+| `actor`        | Controller | ![](assets/images/test-explorer/actor-controller-tests.png)        |
+| `actor`        | Mapper     | ![](assets/images/test-explorer/actor-mapper-tests.png)            |
+| `movie`        | Controller | ![](assets/images/test-explorer/movie-controller-tests.png)        |
+| `movie`        | Service    | ![](assets/images/test-explorer/movie-service-tests.png)           |
+| `movie`        | Mapper     | ![](assets/images/test-explorer/movie-mapper-tests.png)            |
+| `release_year` | Controller | ![](assets/images/test-explorer/release-year-controller-tests.png) |
+| `release_year` | Service    | ![](assets/images/test-explorer/release-year-service-tests.png)    |
+| `release_year` | Mapper     | ![](assets/images/test-explorer/release-year-mapper-tests.png)     |
+
+> **Nota:** el Test Explorer de VS Code muestra 124/124, mientras que la tabla de totales de más arriba indica 111. La diferencia es porque VS Code cuenta cada caso de los tests parametrizados (`@ParameterizedTest`) como una entrada aparte además del test padre; el número real de tests ejecutados, según Maven Surefire, es 111.
 
 [Volver al índice](#-índice)
 
