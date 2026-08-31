@@ -9,6 +9,7 @@
 ## 📑 Índice
 
 - [Descripción](#-descripción)
+- [Cómo reproducir el proyecto](#-cómo-reproducir-el-proyecto)
 - [Tecnologías](#-tecnologías)
 - [Autora](#-autora)
 
@@ -16,7 +17,7 @@
 
 ## 📋 Descripción
 
-**API Movies** es una API REST para gestionar un catálogo de películas: permite consultar, crear, actualizar y eliminar películas, además de buscarlas por título o género, siguiendo una arquitectura por capas (Controller → Service → Repository → Entity). 
+**API Movies** es una API REST para gestionar un catálogo de películas: permite consultar, crear, actualizar y eliminar películas, además de buscarlas por título o género, siguiendo una arquitectura por capas (Controller → Service → Repository → Entity).
 
 Expone seis endpoints sobre el recurso `Movie`:
 
@@ -40,6 +41,57 @@ El enunciado no especifica el tipo exacto de cada relación, así que lo definí
 La petición para crear o actualizar una película recibe listas de ids de género y actor, y el id del año, en vez de objetos completos — el cliente solo manda referencias, y el servicio las resuelve contra sus repositorios antes de guardar. La respuesta sí devuelve los datos ya resueltos (nombres de género, año, actores) para que sea legible sin peticiones adicionales.
 
 `Genre`, `Actor` y `ReleaseYear` no tienen DELETE ni un endpoint de búsqueda propio, así que los diseñé para `Movie` siguiendo las convenciones REST/Spring oficiales: el DELETE devuelve `204 No Content` y `404` si la película no existe; la búsqueda (`/movies/search?title=&genre=`) acepta ambos parámetros como opcionales.
+
+[Volver al índice](#-índice)
+
+---
+
+## 🚀 Cómo reproducir el proyecto
+
+### Requisitos previos
+
+| Herramienta | Requisito                | Guía de instalación                                                                          |
+| ----------- | ------------------------ | -------------------------------------------------------------------------------------------- |
+| JDK 21      | Instalado y en el `PATH` | [Ver guía](https://docs.oracle.com/en/java/javase/21/install/overview-jdk-installation.html) |
+| Git         | Instalado                | [Ver guía](https://git-scm.com/downloads)                                                    |
+
+> No hace falta instalar Maven aparte — el proyecto incluye el wrapper (`mvnw` / `mvnw.cmd`), que descarga la versión correcta automáticamente.
+
+### Pasos
+
+1. Comprueba que tienes Java instalado (si el comando no se reconoce, instálalo desde el enlace de Requisitos previos):
+
+```bash
+   java --version
+```
+
+2. Clona el repositorio:
+
+```bash
+   git clone https://github.com/Jennydev-25/api-movies.git
+```
+
+3. Entra en la carpeta del proyecto:
+
+```bash
+   cd api-movies
+```
+
+4. Ejecuta los tests (compila y genera el reporte de cobertura de JaCoCo):
+
+```bash
+   ./mvnw clean test
+```
+
+El reporte de cobertura se genera en `target/site/jacoco/index.html`, que puedes abrir en el navegador.
+
+5. Levanta la aplicación:
+
+```bash
+   ./mvnw spring-boot:run
+```
+
+La API queda disponible en `http://localhost:8080/api/v1/movies` (y el resto de recursos bajo el mismo prefijo `/api/v1`), ya con el catálogo de 22 películas cargado.
 
 [Volver al índice](#-índice)
 
