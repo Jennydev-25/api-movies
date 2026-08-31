@@ -11,6 +11,7 @@
 - [Descripción](#-descripción)
 - [Cómo reproducir el proyecto](#-cómo-reproducir-el-proyecto)
 - [Modelado de datos y relaciones](#-modelado-de-datos-y-relaciones)
+- [Diagramas](#-diagramas)
 - [Tecnologías](#-tecnologías)
 - [Autora](#-autora)
 
@@ -151,6 +152,69 @@ El modelo está formado por cuatro entidades principales y dos tablas intermedia
 | `release_years` | `id_release_year`      | —                   |
 | `movies_genres` | `movie_id`, `genre_id` | Ambas               |
 | `movies_actors` | `movie_id`, `actor_id` | Ambas               |
+
+[Volver al índice](#-índice)
+
+---
+
+## 📊 Diagramas
+
+Representación visual del modelo de datos en dos notaciones distintas:
+
+### 🔷 Diagrama de Entidad-Relación (Chen)
+
+Representa el modelo conceptual, mostrando las entidades principales y cómo se relacionan entre sí. Entidades (rectángulos), relaciones (rombos) y atributos (elipses), con las claves primarias subrayadas
+
+![Diagrama ER - Notación Chen](assets/diagrams/chen-er.png)
+
+### 🔗 Diagrama de patas de gallo (Crow's Foot)
+
+Representa el esquema físico de la base de datos con las seis tablas (incluidas las tablas puente), sus campos, claves y relaciones
+
+![Diagrama ER - Patas de Gallo](assets/diagrams/crowsfoot.png)
+
+<details>
+<summary>Versión en Mermaid</summary>
+
+\`\`\`mermaid
+erDiagram
+RELEASE_YEARS ||--o{ MOVIES : "releases"
+GENRES ||--o{ MOVIES_GENRES : "classifies"
+MOVIES ||--o{ MOVIES_GENRES : "has"
+MOVIES ||--o{ MOVIES_ACTORS : "stars"
+ACTORS ||--o{ MOVIES_ACTORS : "acts_in"
+
+    RELEASE_YEARS {
+        bigint id_release_year PK
+        int release_year
+    }
+    MOVIES {
+        bigint id_movie PK
+        varchar title
+        bigint release_year_id FK
+    }
+    GENRES {
+        bigint id_genre PK
+        varchar name
+    }
+    ACTORS {
+        bigint id_actor PK
+        varchar name
+        varchar nationality
+        date birth_date
+    }
+    MOVIES_GENRES {
+        bigint movie_id PK
+        bigint genre_id PK
+    }
+    MOVIES_ACTORS {
+        bigint movie_id PK
+        bigint actor_id PK
+    }
+
+\`\`\`
+
+</details>
 
 [Volver al índice](#-índice)
 
