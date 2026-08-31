@@ -4,7 +4,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -187,5 +189,13 @@ class MovieControllerTest {
         return Stream.of(
                 Arguments.of(new MovieExceptionNotFound("Movie not found. Id 1 does not exist."), 404),
                 Arguments.of(null, 409));
+    }
+
+    @Test
+    void testDelete_ShouldReturnNoContent() throws Exception {
+        mockMvc.perform(delete("/api/v1/movies/1"))
+                .andExpect(status().isNoContent());
+
+        verify(service).deleteById(1L);
     }
 }
