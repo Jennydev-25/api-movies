@@ -10,6 +10,7 @@
 
 - [Descripción](#-descripción)
 - [Cómo reproducir el proyecto](#-cómo-reproducir-el-proyecto)
+- [Modelado de datos y relaciones](#-modelado-de-datos-y-relaciones)
 - [Tecnologías](#-tecnologías)
 - [Autora](#-autora)
 
@@ -92,6 +93,64 @@ El reporte de cobertura se genera en `target/site/jacoco/index.html`, que puedes
 ```
 
 La API queda disponible en `http://localhost:8080/api/v1/movies` (y el resto de recursos bajo el mismo prefijo `/api/v1`), ya con el catálogo de 22 películas cargado.
+
+[Volver al índice](#-índice)
+
+---
+
+## 🗄️ Modelado de datos y relaciones
+
+El modelo está formado por cuatro entidades principales y dos tablas intermedias para resolver las relaciones de muchos a muchos (N:M).
+
+**`movies`** — las películas del catálogo
+
+- `id_movie` (PK)
+- `title`
+- `release_year_id` (FK)
+
+**`genres`** — catálogo de géneros cinematográficos
+
+- `id_genre` (PK)
+- `name`
+
+**`actors`** — catálogo de actores principales
+
+- `id_actor` (PK)
+- `name`
+- `nationality`
+- `birth_date`
+
+**`release_years`** — catálogo de años de estreno
+
+- `id_release_year` (PK)
+- `release_year`
+
+**`movies_genres`** — tabla de unión (relación N:M) entre películas y géneros
+
+- `movie_id` (PK, FK)
+- `genre_id` (PK, FK)
+
+**`movies_actors`** — tabla de unión (relación N:M) entre películas y actores
+
+- `movie_id` (PK, FK)
+- `actor_id` (PK, FK)
+
+### 🔗 Relaciones del modelo
+
+- Un año de estreno puede agrupar muchas películas, pero cada película tiene un único año (**1:N**)
+- Una película puede tener varios géneros, y un género puede pertenecer a varias películas (**N:M**), resuelto mediante `movies_genres`
+- Una película puede tener varios actores, y un actor puede aparecer en varias películas (**N:M**), resuelto mediante `movies_actors`
+
+### 🔑 Claves primarias y foráneas
+
+| Tabla           | Clave primaria         | Clave(s) foránea(s) |
+| --------------- | ---------------------- | ------------------- |
+| `movies`        | `id_movie`             | `release_year_id`   |
+| `genres`        | `id_genre`             | —                   |
+| `actors`        | `id_actor`             | —                   |
+| `release_years` | `id_release_year`      | —                   |
+| `movies_genres` | `movie_id`, `genre_id` | Ambas               |
+| `movies_actors` | `movie_id`, `actor_id` | Ambas               |
 
 [Volver al índice](#-índice)
 
