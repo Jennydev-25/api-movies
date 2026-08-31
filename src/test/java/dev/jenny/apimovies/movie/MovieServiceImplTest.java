@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
@@ -167,5 +168,14 @@ class MovieServiceImplTest {
 
         assertThrows(MovieExceptionNotFound.class, () -> service.updateEntity(1L,
                 new MovieDTORequest("El niño con el pijama de rayas", Set.of(1L), 1L, Set.of(1L))));
+    }
+
+    @Test
+    void testDeleteById_ShouldDeleteMovie() {
+        when(repository.existsById(1L)).thenReturn(true);
+
+        service.deleteById(1L);
+
+        verify(repository).deleteById(1L);
     }
 }
