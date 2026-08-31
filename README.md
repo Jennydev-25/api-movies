@@ -6,6 +6,14 @@
 
 ---
 
+## 📸 Vista previa
+
+|            Diagrama de Chen             |           Diagrama Crow's Foot            |                           Testing                           |               Cobertura (JaCoCo)                |
+| :-------------------------------------: | :---------------------------------------: | :---------------------------------------------------------: | :---------------------------------------------: |
+| ![](assets/images/diagrams/chen-er.png) | ![](assets/images/diagrams/crowsfoot.png) | ![](assets/images/test-explorer/test-explorer-overview.png) | ![](assets/images/coverage/coverage-jacoco.png) |
+
+---
+
 ## 📑 Índice
 
 - [Descripción](#-descripción)
@@ -15,6 +23,7 @@
 - [Testing](#-testing)
 - [Cobertura de tests](#-cobertura-de-tests)
 - [Tecnologías](#-tecnologías)
+- [Recursos](#-recursos)
 - [Autora](#-autora)
 
 ---
@@ -167,13 +176,13 @@ Representación visual del modelo de datos en dos notaciones distintas:
 
 Representa el modelo conceptual, mostrando las entidades principales y cómo se relacionan entre sí. Entidades (rectángulos), relaciones (rombos) y atributos (elipses), con las claves primarias subrayadas
 
-![Diagrama ER - Notación Chen](assets/diagrams/chen-er.png)
+![Diagrama ER - Notación Chen](assets/images/diagrams/chen-er.png)
 
 ### 🔗 Diagrama de patas de gallo (Crow's Foot)
 
 Representa el esquema físico de la base de datos con las seis tablas (incluidas las tablas puente), sus campos, claves y relaciones
 
-![Diagrama ER - Patas de Gallo](assets/diagrams/crowsfoot.png)
+![Diagrama ER - Patas de Gallo](assets/images/diagrams/crowsfoot.png)
 
 <details>
 <summary>Versión en Mermaid</summary>
@@ -301,6 +310,25 @@ El proyecto mantiene el 100% de cobertura en instrucciones, ramas, líneas y mé
 - **[Hamcrest](https://hamcrest.org/JavaHamcrest/)** — Librería de matchers para aserciones legibles
 - **[JaCoCo](https://www.jacoco.org/jacoco/)** — Medición de la cobertura de tests
 - **[Git](https://git-scm.com/)** / **[GitHub](https://github.com/)** — Control de versiones y alojamiento del proyecto
+
+[Volver al índice](#-índice)
+
+---
+
+## 📚 Recursos
+
+- [Spring Data JPA — Reference Documentation](https://docs.spring.io/spring-data/jpa/reference/) — Documentación oficial consultada para las relaciones `@ManyToMany`/`@ManyToOne` y `@JoinTable` entre `Movie`, `Genre`, `Actor` y `ReleaseYear`
+
+* [Spring Boot — Data Initialization](https://docs.spring.io/spring-boot/reference/howto/data-initialization.html) — Documentación oficial sobre `spring.jpa.defer-datasource-initialization=true`, para que Hibernate cree el esquema antes de ejecutar `data.sql`
+
+- [JUnit 5 User Guide](https://junit.org/junit5/docs/current/user-guide/) — Documentación oficial de JUnit 5 aplicada en los tests de Controller y Service
+- [Parameterized Tests in JUnit 5 (Baeldung)](https://www.baeldung.com/parameterized-tests-junit-5) — Patrón aplicado en los tests de manejo de excepciones con `@ParameterizedTest` + `@MethodSource`
+- [Hamcrest – JavaHamcrest](https://hamcrest.org/JavaHamcrest/) — Documentación de los matchers usados en las aserciones de los tests
+- [Mockito](https://site.mockito.org/) — Mocks de repositorios y servicios en los tests unitarios
+- [JaCoCo Maven Plugin](https://www.jacoco.org/jacoco/trunk/doc/maven.html) — Configuración del plugin de cobertura y de la exclusión de `App.class`
+- [Error Handling for REST with Spring (Baeldung)](https://www.baeldung.com/exception-handling-for-rest-with-spring) — Base para el `GlobalExceptionHandler` con `@RestControllerAdvice`
+- [Jakarta Bean Validation](https://beanvalidation.org/) — Anotaciones `@NotBlank`/`@NotNull` en los DTOs de entrada
+- [MDN — HTTP response status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status) — Criterio para devolver `204 No Content` en el DELETE y `404` cuando el recurso no existe
 
 ---
 
