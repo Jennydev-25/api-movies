@@ -1,0 +1,64 @@
+package dev.jenny.apimovies.genre;
+
+import java.util.List;
+
+import dev.jenny.apimovies.genre.dtos.GenreDTORequest;
+import dev.jenny.apimovies.genre.dtos.GenreDTOResponse;
+import dev.jenny.apimovies.genre.exceptions.GenreExceptionNotFound;
+import dev.jenny.apimovies.genre.mappers.GenreMapper;
+import dev.jenny.apimovies.implementations.InterfaceGenericEditService;
+import org.springframework.data.domain.Example;
+import org.springframework.stereotype.Service;
+
+@Service
+public class GenreServiceImpl implements InterfaceGenreService,
+        InterfaceGenericEditService<GenreDTORequest, GenreDTOResponse> {
+    private final GenreRepository repository;
+
+    public GenreServiceImpl(GenreRepository repository) {
+        this.repository = repository;
+    }
+
+    @Override
+    public List<GenreDTOResponse> getEntities() {
+        return repository.findAll().stream()
+                .map(GenreMapper::toDTO)
+                .toList();
+    }
+
+    @Override
+    public GenreDTOResponse getById(Long id) {
+        GenreEntity genre = repository.findById(id)
+                .orElseThrow(() -> new GenreExceptionNotFound("Genre not found. Id " + id + " does not exist."));
+        return GenreMapper.toDTO(genre);
+    }
+
+    @Override
+    public GenreDTOResponse storeEntity(GenreDTORequest dto) {
+        GenreEntity genreToSave = GenreMapper.toEntity(dto);
+
+        Example<GenreEntity> example = Example.of(genreToSave);
+        boolean isEmpty = repository.findAll(example).isEmpty();
+
+        if (!isEmpty)
+            return null;
+
+        GenreEntity genreSaved = repository.save(genreToSave);
+        return GenreMapper.toDTO(genreSaved);
+    }
+
+    @Override
+    public GenreDTOResponse updateEntity(Long id, GenreDTORequest dto) {
+        boolean genreExists = repository.existsById(id);
+        if (!genreExists)
+            throw new GenreExceptionNotFound("Genre not found. Id " + id + " does not exist.");
+
+        boolean nameExists = repository.existsByNameAndIdNot(dto.name(), id);
+        if (nameExists)
+            return null;
+
+        GenreEntity genreToUpdate = new GenreEntity(id, dto.name());
+        GenreEntity genreUpdated = repository.save(genreToUpdate);
+        return GenreMapper.toDTO(genreUpdated);
+    }
+}
