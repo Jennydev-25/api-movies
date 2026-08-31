@@ -194,4 +194,20 @@ class MovieServiceImplTest {
         assertThat(movies.size(), is(equalTo(1)));
         assertThat(movies.get(0).title(), is(equalTo("El niño con el pijama de rayas")));
     }
+
+    @Test
+    void testFindBy_ShouldReturnMoviesByGenre() {
+        GenreEntity genre = new GenreEntity(1L, "Drama");
+        ReleaseYearEntity releaseYear = new ReleaseYearEntity(1L, 2008);
+        ActorEntity actor = new ActorEntity(1L, "Jack Scanlon", "English", LocalDate.of(1998, 8, 6));
+        MovieEntity movie = new MovieEntity(1L, "El niño con el pijama de rayas", Set.of(genre), releaseYear,
+                Set.of(actor));
+
+        when(repository.findByGenres_NameContainingIgnoreCase("Drama")).thenReturn(List.of(movie));
+
+        List<MovieDTOResponse> movies = service.findBy(null, "Drama");
+
+        assertThat(movies.size(), is(equalTo(1)));
+        assertThat(movies.get(0).title(), is(equalTo("El niño con el pijama de rayas")));
+    }
 }
