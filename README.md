@@ -187,13 +187,13 @@ Representa el esquema físico de la base de datos con las seis tablas (incluidas
 <details>
 <summary>Versión en Mermaid</summary>
 
-\`\`\`mermaid
+```mermaid
 erDiagram
-RELEASE_YEARS ||--o{ MOVIES : "releases"
-GENRES ||--o{ MOVIES_GENRES : "classifies"
-MOVIES ||--o{ MOVIES_GENRES : "has"
-MOVIES ||--o{ MOVIES_ACTORS : "stars"
-ACTORS ||--o{ MOVIES_ACTORS : "acts_in"
+    RELEASE_YEARS ||--o{ MOVIES : "releases"
+    GENRES ||--o{ MOVIES_GENRES : "classifies"
+    MOVIES ||--o{ MOVIES_GENRES : "has"
+    MOVIES ||--o{ MOVIES_ACTORS : "stars"
+    ACTORS ||--o{ MOVIES_ACTORS : "acts_in"
 
     RELEASE_YEARS {
         bigint id_release_year PK
@@ -222,8 +222,7 @@ ACTORS ||--o{ MOVIES_ACTORS : "acts_in"
         bigint movie_id PK
         bigint actor_id PK
     }
-
-\`\`\`
+```
 
 </details>
 
@@ -332,7 +331,7 @@ El proyecto mantiene el 100% de cobertura en instrucciones, ramas, líneas y mé
 
 ---
 
-## 👩‍💻 Autora
+## 👩💻 Autora
 
 **[Jenny Sánchez Requejo](https://github.com/Jennydev-25)**
 
