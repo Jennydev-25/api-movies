@@ -33,7 +33,13 @@ Cada película está relacionada con tres entidades propias:
 - **Actor** — relación de muchos a muchos (N:M), una película puede tener varios actores, y un actor puede aparecer en varias películas
 - **Año de estreno** — relación de muchos a uno (N:1): cada película pertenece a un único año, y un año puede agrupar varias películas
 
-Género, actor y año exponen su propio endpoint de consulta (listar todos / obtener por id), sin operaciones de escritura; sirven como catálogo de referencia para construir y actualizar películas, no como recursos gestionables por sí mismos.
+Género, actor y año exponen también su propio conjunto de endpoints (listar todas, obtener por id, crear y actualizar); además de servir como catálogo de referencia para construir y relacionar películas, son recursos totalmente gestionables por sí mismos.
+
+El enunciado no especifica el tipo exacto de cada relación, así que lo definí a partir de cómo funciona en la vida real: género y actor son N:M (una película puede tener varios géneros/actores, y un género/actor puede aparecer en varias películas), resueltas con tablas intermedias (`movies_genres`, `movies_actors`); año de estreno es N:1 (cada película tiene un único año), con una relación `@ManyToOne` simple.
+
+La petición para crear o actualizar una película recibe listas de ids de género y actor, y el id del año, en vez de objetos completos — el cliente solo manda referencias, y el servicio las resuelve contra sus repositorios antes de guardar. La respuesta sí devuelve los datos ya resueltos (nombres de género, año, actores) para que sea legible sin peticiones adicionales.
+
+`Genre`, `Actor` y `ReleaseYear` no tienen DELETE ni un endpoint de búsqueda propio, así que los diseñé para `Movie` siguiendo las convenciones REST/Spring oficiales: el DELETE devuelve `204 No Content` y `404` si la película no existe; la búsqueda (`/movies/search?title=&genre=`) acepta ambos parámetros como opcionales.
 
 [Volver al índice](#-índice)
 
