@@ -9,4 +9,6 @@ public interface InterfaceMovieService {
     List<MovieDTOResponse> getEntities();
 
     MovieDTOResponse getById(Long id);
+
+    void deleteById(Long id);
 }

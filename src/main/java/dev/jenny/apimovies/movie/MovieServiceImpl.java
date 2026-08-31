@@ -87,4 +87,12 @@ public class MovieServiceImpl implements InterfaceMovieService,
         MovieEntity movieSaved = repository.save(movieToSave);
         return MovieMapper.toDTO(movieSaved);
     }
+
+    @Override
+    public void deleteById(Long id) {
+        if (!repository.existsById(id))
+            throw new MovieExceptionNotFound("Movie not found. Id " + id + " does not exist.");
+
+        repository.deleteById(id);
+    }
 }
