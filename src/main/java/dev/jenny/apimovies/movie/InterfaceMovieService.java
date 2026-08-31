@@ -11,4 +11,6 @@ public interface InterfaceMovieService {
     MovieDTOResponse getById(Long id);
 
     void deleteById(Long id);
+
+    List<MovieDTOResponse> findBy(String title, String genre);
 }

@@ -95,4 +95,19 @@ public class MovieServiceImpl implements InterfaceMovieService,
 
         repository.deleteById(id);
     }
+
+    @Override
+    public List<MovieDTOResponse> findBy(String title, String genre) {
+        List<MovieEntity> movies;
+        if (title != null) {
+            movies = repository.findByTitleContainingIgnoreCase(title);
+        } else if (genre != null) {
+            movies = repository.findByGenres_NameContainingIgnoreCase(genre);
+        } else {
+            movies = repository.findAll();
+        }
+        return movies.stream()
+                .map(MovieMapper::toDTO)
+                .toList();
+    }
 }
