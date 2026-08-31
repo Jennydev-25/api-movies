@@ -19,6 +19,7 @@ import java.util.stream.Stream;
 import dev.jenny.apimovies.implementations.InterfaceGenericEditService;
 import dev.jenny.apimovies.movie.dtos.MovieDTORequest;
 import dev.jenny.apimovies.movie.dtos.MovieDTOResponse;
+import dev.jenny.apimovies.movie.exceptions.MovieException;
 import dev.jenny.apimovies.movie.exceptions.MovieExceptionNotFound;
 
 import org.junit.jupiter.api.Test;
@@ -231,5 +232,20 @@ class MovieControllerTest {
 
         assertThat(response.getStatus(), is(equalTo(200)));
         assertThat(response.getContentAsString(), is(equalTo(responseJson)));
+    }
+
+    @ParameterizedTest
+    @MethodSource("exceptionScenarios")
+    void testGetById_ShouldHandleUnexpectedExceptions(Exception exception, int expectedStatus) throws Exception {
+        when(service.getById(1L)).thenThrow(exception);
+
+        mockMvc.perform(get("/api/v1/movies/1"))
+                .andExpect(status().is(expectedStatus));
+    }
+
+    private static Stream<Arguments> exceptionScenarios() {
+        return Stream.of(
+                Arguments.of(new MovieException("Invalid movie operation"), 400),
+                Arguments.of(new RuntimeException("Unexpected error"), 500));
     }
 }
